@@ -1,2 +1,2 @@
-def does_player1_win(player1_hand, player2_hand):
+def get_winning_player(player1_hand, player2_hand):
     return True

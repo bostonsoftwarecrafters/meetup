@@ -1,4 +1,4 @@
-from src.game import does_player1_win
+from src.game import get_winning_player
 
 PAPER = "Paper"
 SCISSORS = "Scissors"
@@ -9,7 +9,7 @@ def test_pass():
     assert 1==1
 
 def test_player1_wins():
-    assert does_player1_win(ROCK, SCISSORS) == True
-    assert does_player1_win(SCISSORS, PAPER) == True
+    assert get_winning_player(ROCK, SCISSORS) == 1
+    assert get_winning_player(SCISSORS, PAPER) == 1
 
 
