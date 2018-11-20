@@ -10,4 +10,5 @@ def test_player1_wins():
 def test_player2_wins():
     assert get_winning_player(SCISSORS, ROCK) == 2
 
-
+def test_tie():
+    assert get_winning_player(PAPER, PAPER) == 0
