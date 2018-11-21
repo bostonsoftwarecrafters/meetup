@@ -1,6 +1,6 @@
 PAPER = "Paper"
-SCISSORS = "Scissors"
 ROCK = "Rock"
+SCISSORS = "Scissors"
 
 def get_winning_player(player1_hand, player2_hand):
     outcomes = {(SCISSORS,ROCK):2,(ROCK,PAPER):2}
