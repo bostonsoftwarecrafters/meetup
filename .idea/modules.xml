@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/RockPaperScissors2.iml" filepath="$PROJECT_DIR$/.idea/RockPaperScissors2.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/burlington-rockpaperscissors-python-2018-nov.iml" filepath="$PROJECT_DIR$/.idea/burlington-rockpaperscissors-python-2018-nov.iml" />
     </modules>
   </component>
 </project>
