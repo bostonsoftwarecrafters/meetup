@@ -11,6 +11,7 @@ def get_winning_player(player1_hand, player2_hand, player3_hand = None):
 
 
 def get_three_player_winner(player1_hand, player2_hand, player3_hand):
+   #TODO Make code more intuitive to return the correct player.
     player1v2 = get_two_player_winner(player1_hand, player2_hand)
     player1v3 = get_two_player_winner(player1_hand, player3_hand)
     player2v3 = get_two_player_winner(player2_hand, player3_hand)
@@ -18,10 +19,12 @@ def get_three_player_winner(player1_hand, player2_hand, player3_hand):
         return 1
     elif (player1v2 == 2 and player2v3 == 1): #change this!
         return 2
+    elif (player1v2 == 0 and player2v3 ==2):
+        return 3
     else:
         return 0
 
-
+#TODO consider refactor dictionary, value is not used
 def get_two_player_winner(player1_hand, player2_hand):
     PLAYER2_WINS = {(SCISSORS,ROCK):True,(ROCK,PAPER):True,(PAPER,SCISSORS):True}
     if player1_hand == player2_hand:

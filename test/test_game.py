@@ -22,3 +22,6 @@ def test_player1_of_3_wins():
 
 def test_player2_of_3_wins():
     assert 2 == get_winning_player(PAPER, SCISSORS, PAPER)
+
+def test_player3_of_3_wins():
+    assert 3 == get_winning_player(PAPER, PAPER, SCISSORS)
