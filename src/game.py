@@ -7,24 +7,27 @@ def get_winning_player(player1_hand, player2_hand, player3_hand = None):
     if player3_hand == None:
         return get_two_player_winner(player1_hand, player2_hand)
     else:
-        player1v2 = get_two_player_winner(player1_hand, player2_hand)
-        player1v3 = get_two_player_winner(player1_hand, player3_hand)
-        player2v3 = get_two_player_winner(player2_hand, player3_hand)
-        #if (get_two_player_winner(player1_hand, player2_hand))
-        if (player1_hand, player2_hand) == (PAPER, SCISSORS):
-            return 2
-        elif player2_hand == SCISSORS:
-            return 1
-        else:
-            return 0
+        return get_three_player_winner(player1_hand, player2_hand, player3_hand)
+
+
+def get_three_player_winner(player1_hand, player2_hand, player3_hand):
+    player1v2 = get_two_player_winner(player1_hand, player2_hand)
+    player1v3 = get_two_player_winner(player1_hand, player3_hand)
+    player2v3 = get_two_player_winner(player2_hand, player3_hand)
+    if (player1v2 == 1 and player1v3 == 1):
+        return 1
+    elif (player1v2 == 2 and player2v3 == 1): #change this!
+        return 2
+    else:
+        return 0
 
 
 def get_two_player_winner(player1_hand, player2_hand):
-    outcomes = {(SCISSORS,ROCK):2,(ROCK,PAPER):2}
+    PLAYER2_WINS = {(SCISSORS,ROCK):True,(ROCK,PAPER):True,(PAPER,SCISSORS):True}
     if player1_hand == player2_hand:
         return 0
     try:
-        result = outcomes[(player1_hand, player2_hand)]
-        return result
+        does_player2_win = PLAYER2_WINS[(player1_hand, player2_hand)]
+        return 2
     except:
         return 1
