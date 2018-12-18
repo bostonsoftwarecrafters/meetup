@@ -1,12 +1,18 @@
 from src.game import get_winning_player, PAPER, SCISSORS, ROCK
 
 def test_player1_wins():
-    assert get_winning_player(ROCK, SCISSORS) == 1
-    assert get_winning_player(SCISSORS, PAPER) == 1
+    assert 1 == get_winning_player(ROCK, SCISSORS)
+    assert 1 == get_winning_player(SCISSORS, PAPER)
+
 
 def test_player2_wins():
-    assert get_winning_player(SCISSORS, ROCK) == 2
-    assert get_winning_player(ROCK,PAPER) == 2
+    assert 2 == get_winning_player(SCISSORS, ROCK)
+    assert 2 == get_winning_player(ROCK, PAPER)
 
-def test_tie():
-    assert get_winning_player(PAPER, PAPER) == 0
+
+def test_two_way_tie():
+    assert 0 == get_winning_player(PAPER, PAPER)
+
+
+def test_three_way_tie():
+    assert 0 == get_winning_player(ROCK, PAPER, SCISSORS)
