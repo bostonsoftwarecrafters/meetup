@@ -1,0 +1,138 @@
+{
+    "dungeons-and-dragons": {
+        "version": 0.1,
+        "last_updated": "2018-11-19T17:52:19",
+        "endpoints": {
+            "create_account": {
+                "url": "\/api\/account",
+                "methods": [
+                    "POST"
+                ],
+                "content_type": "JSON",
+                "example_request": {
+                    "name": "My Team or Personal Name"
+                },
+                "example_response": {
+                    "uuid": "3ae2136a-100d-4425-81c4-dbbc8dfa70d6",
+                    "name": "My (Unique) Team or Personal Name",
+                    "uri": "\/api\/account\/3ae2136a-100d-4425-81c4-dbbc8dfa70d6"
+                },
+                "common_error_responses": [
+                    "400 Bad Request: Account Already Exists!"
+                ]
+            },
+            "account_status": {
+                "url": "\/api\/account\/{account_uid}",
+                "methods": [
+                    "GET"
+                ],
+                "content_type": "JSON",
+                "example_response": {
+                    "uuid": "3ae2136a-100d-4425-81c4-dbbc8dfa70d6",
+                    "name": "My Unique Team or Personal Name",
+                    "last_active": "2018-09-24 14:23:58.995185",
+                    "total_games": 5,
+                    "total_wins": 1,
+                    "total_losses": 4,
+                    "win_loss_ratio": 0.2,
+                    "last_score": 57,
+                    "best_score": 23
+                },
+                "common_error_responses": [
+                    "404 Not Found: Account UUID not found?"
+                ]
+            },
+            "reset_account_stats": {
+                "url": "\/api\/account\/{account_uid}",
+                "methods": [
+                    "POST"
+                ],
+                "content_type": "JSON",
+                "example_status_request": {
+                    "POST (JSON)": {
+                        "action": "reset"
+                    }
+                },
+                "example_response": {
+                    "account_info": {
+                        "best_score": 0,
+                        "last_active": "2019-04-22 18:35:29.269599",
+                        "last_score": 0,
+                        "name": "Foobar",
+                        "total_games": 0,
+                        "total_losses": 0,
+                        "total_wins": 0,
+                        "uuid": "7d0dfd00-4420-4c1e-865e-394c3ba1980c",
+                        "win_loss_ratio": 0.0
+                    },
+                    "result": "Account Reset Successful"
+                },
+                "common_error_responses": [
+                    "404 Not Found: Account UUID not found?"
+                ]
+            },
+            "game_status": {
+                "url": "\/api\/game",
+                "methods": [
+                    "POST"
+                ],
+                "content_type": "JSON",
+                "example_status_request": {
+                    "POST (JSON)": {}
+                },
+                "example_game_status_response": {
+                    "game": "On",
+                    "inventory": [],
+                    "nearby": [],
+                    "turn": 1,
+                    "score": 0,
+                    "location": "D2",
+                    "status": "Alive",
+                    "valid_actions": [
+                        "Move"
+                    ],
+                    "event_log": [
+                        "Continuing to the north, you find a chamber marked D2."
+                    ]
+                },
+                "example_action_move_request": {
+                    "POST (JSON)": {
+                        "action": "move",
+                        "direction": "north"
+                    }
+                },
+                "example_action_attack_request": {
+                    "POST (JSON)": {
+                        "action": "attack",
+                        "direction": "east"
+                    }
+                },
+                "example_game_over_response": {
+                    "game": "Over",
+                    "inventory": [],
+                    "nearby": [],
+                    "turn": 3,
+                    "score": 1,
+                    "location": "C3",
+                    "status": "(Trapped in a dark pit until dead)",
+                    "valid_actions": [
+                        "Restart"
+                    ],
+                    "event_log": [
+                        "Advancing eastwards, you find a passage marked C3.",
+                        "The floor suddenly gives way, dropping you into a deep Pit below the labyrinth!",
+                        "You are trapped in the Pit, and, unable to escape, die a slow, painful death in the dark. Bummer!"
+                    ]
+                },
+                "example_restart_request": {
+                    "POST (JSON)": {
+                        "action": "restart"
+                    }
+                },
+                "common_error_responses": [
+                    "401 Unauthorized: Account UUID not found?"
+                ]
+            }
+        }
+    }
+}
