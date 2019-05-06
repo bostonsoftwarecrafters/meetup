@@ -1,4 +1,4 @@
-from cell_result_class import CellResult
+from src.cell_result_class import CellResult
 
 
 class WarriorMoveAndResult(object):

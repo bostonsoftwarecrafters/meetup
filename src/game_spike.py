@@ -65,7 +65,6 @@ for x in range(11):
         result = moveWarrior("east").json()
         result = moveWarrior("south").json()
         result = moveWarrior("north").json()
-        print("**********" + str(result["inventory"]))
 
     print(nearby)
 

@@ -1,7 +1,7 @@
-from cell_result_class import CellResult
-from d_and_d_class import DandDGame
-from d_and_d_utility import location_in_direction_of
-from move_class import WarriorMoveAndResult
+from src.cell_result_class import CellResult
+from src.d_and_d_class import DandDGame
+from src.d_and_d_utility import location_in_direction_of
+from src.move_class import WarriorMoveAndResult
 
 TEST_ACCOUNT_UID: str = 'bee769ac-b6b7-4eb0-b441-1c8ada77adb6'
 
@@ -36,7 +36,7 @@ def test_move_back_to_same_cell():
    start_move = game.get_move(0)
    first_move = game.action_move("north","test")
    move_back = game.action_move("south","test")
-   assert move_back.result == start_move.result
+   assert move_back.result.location == start_move.result.location
 
 def test_move_catalog_cells_and_moves():
     game = DandDGame(TEST_ACCOUNT_UID)
@@ -69,7 +69,9 @@ def test_move_in_all_directions():
     east_cell = game.action_move("east","test east").result
     east_cell_back = game.action_move("west","test back west").result
     # TODO: create assert, move in different directions
-    assert start_cell == north_cell_back == south_cell_back == west_cell_back == east_cell_back
+    assert start_cell.location == north_cell_back.location == \
+           south_cell_back.location == west_cell_back.location == \
+           east_cell_back.location
     assert location_in_direction_of(start_cell.location, "north") == north_cell.location
     assert location_in_direction_of(start_cell.location, "south") == south_cell.location
     assert location_in_direction_of(start_cell.location, "west") == west_cell.location

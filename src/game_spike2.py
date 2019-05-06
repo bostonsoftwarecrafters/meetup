@@ -22,10 +22,6 @@ def get_cell(response):
 
 
 def print_cell(cell):
-    try:
-        content = cell["contents"]
-    except:
-        content = "undefined"
     print(cell)
 
 def get_unknown_adjacent_locations(location):

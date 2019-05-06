@@ -1,5 +1,4 @@
-from cell_result_class import CellResult
-from mock_game_class import MockGame
+from src.mock_game_class import MockGame
 
 def test_nearby():
     mock_board_game = MockGame("A1")

@@ -1,8 +1,10 @@
+import copy
+
 import requests
 from requests import HTTPError
 
-from cell_result_class import CellResult
-from move_class import WarriorMoveAndResult
+from src.cell_result_class import CellResult
+from src.move_class import WarriorMoveAndResult
 
 class DandDGame(object):
 
@@ -16,7 +18,6 @@ class DandDGame(object):
         return self._cells_visited[location]
 
     def make_cell_from_response(self, response):
-        print("response", response)
         json_resp = response.json()
         result_cell = CellResult(location=json_resp["location"],
                           game=json_resp["game"],
@@ -25,8 +26,8 @@ class DandDGame(object):
                           valid_actions=json_resp["valid_actions"],
                           nearby=json_resp["nearby"]
                           )
-        ret_val = self.catalog_cell_visited(result_cell)
-        return ret_val
+        self.catalog_cell_visited(result_cell)
+        return result_cell
 
     def get_move(self, index):
         return self._moves[index]
@@ -54,12 +55,7 @@ class DandDGame(object):
         return self._cells_visited
 
     def catalog_cell_visited(self, cell):
-        try:
-            ret_val = self._cells_visited[cell.location]
-            return ret_val
-        except:
-            self._cells_visited[cell.location] = cell
-            return cell
+        self._cells_visited[cell.location] = copy.deepcopy(cell)
 
 
     def action_move(self, direction, reason):
@@ -74,7 +70,7 @@ class DandDGame(object):
             action=action,
             direction=direction,
             reason=reason,
-            result=result
+            result=copy.deepcopy(result)
         )
         self._moves.append(move)
         return move

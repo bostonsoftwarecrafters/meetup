@@ -1,6 +1,6 @@
-from cell_result_class import CellResult
-from d_and_d_class import DandDGame
-from d_and_d_utility import location_in_direction_of, get_adjacent_locations, add_comma
+from src.cell_result_class import CellResult
+from src.d_and_d_class import DandDGame
+from src.d_and_d_utility import location_in_direction_of, get_adjacent_locations, add_comma
 
 class MockGame(DandDGame):
     def __init__(self, uid, location="G4"):
@@ -20,8 +20,9 @@ class MockGame(DandDGame):
             reason=""):
         if action == "restart":
             start_cell = CellResult(location=self._mock_start_location)
-            self.add_move(action=action,direction="N/A",reason=reason,result=start_cell)
+            move = self.add_move(action=action,direction="N/A",reason=reason,result=start_cell)
             self.catalog_cell_visited(start_cell)
+            return move
         elif action == "move":
             move_list = self.get_moves()
             current_cell = move_list[len(move_list)-1].result
@@ -53,19 +54,10 @@ class MockGame(DandDGame):
 
     def set_nearby(self, CellResult):
         location = CellResult.location
-        print ("Setting nearby",location)
         CellResult.nearby = self.get_nearby(location)
 
     def make_mock_cell(self, location):
-        try:
-            ret_val = self.get_cell(location)
-            print ("Here")
-        except:
-            ret_val = CellResult(location=location)
-            print ("There")
-        print("Make location",ret_val.location)
-        huh = CellResult("A1")
-        print("Cell",huh.location)
+        ret_val = CellResult(location=location)
         self.set_nearby(ret_val)
         return ret_val
 

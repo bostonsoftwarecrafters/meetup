@@ -1,7 +1,7 @@
-from d_and_d_class import DandDGame
-from d_and_d_utility import location_in_direction_of
-from mock_game_class import MockGame
-from test_basic_play import TEST_ACCOUNT_UID
+from src.d_and_d_class import DandDGame
+from src.d_and_d_utility import location_in_direction_of
+from src.mock_game_class import MockGame
+from src.test_basic_play import TEST_ACCOUNT_UID
 
 
 def test_mock_create_game():
@@ -17,7 +17,7 @@ def test_define_init_cell():
     cell_visited = mock_game.get_cells_visited()["G3"]
     assert move.action == "restart"
     assert cell_visited.location == "G3"
-    assert cell_visited == move.result
+    assert move.result.location == "G3"
 
 def test_mock_all_directions():
     game = MockGame(TEST_ACCOUNT_UID)
@@ -31,8 +31,11 @@ def test_mock_all_directions():
     east_cell = game.action_move("east","test east").result
     east_cell_back = game.action_move("west","test back west").result
     # TODO: create assert, move in different directions
-    assert start_cell.location == north_cell_back.location == south_cell_back.location == west_cell_back.location == east_cell_back.location
-    assert start_cell == north_cell_back
+    assert start_cell.location == \
+           north_cell_back.location == \
+           south_cell_back.location == \
+           west_cell_back.location == \
+           east_cell_back.location
     assert location_in_direction_of(start_cell.location, "north") == north_cell.location
     assert location_in_direction_of(start_cell.location, "south") == south_cell.location
     assert location_in_direction_of(start_cell.location, "west") == west_cell.location
