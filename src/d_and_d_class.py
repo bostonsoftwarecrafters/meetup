@@ -1,16 +1,19 @@
 import copy
+from typing import Optional
 
 import requests
 from requests import HTTPError
 
 from src.cell_result_class import CellResult
-from src.move_class import WarriorMoveAndResult
+from src.action_class import Action
+from test_directions import Direction
 
-class DandDGame(object):
+
+class DNDGame(object):
 
     def __init__(self, uuid: str):
         self._cells_visited = {}
-        self._moves = []
+        self._actions = []
         self.uuid = uuid
         self.action_start_game()
 
@@ -29,27 +32,27 @@ class DandDGame(object):
         self.catalog_cell_visited(result_cell)
         return result_cell
 
-    def get_move(self, index):
-        return self._moves[index]
+    def get_action(self, index) -> Action:
+        return self._actions[index]
 
     def action_start_game(self):
         result_cell = self.get_api_result_cell(action="restart")
         print(result_cell)
 
-    def get_api_result_cell(self, action, direction="N/A",reason=""):
+    def get_api_result_cell(self, action, direction: Optional[Direction] = None,reason=""):
         json_parameter = {"account_uuid": self.uuid,
                           "action": action}
 
-        if direction != "N/A":
-            json_parameter["direction"] = direction
+        if direction is not None:
+            json_parameter["direction"] = direction.value
         response = requests.post(BASE_URL + "/api/game", json=json_parameter)
         if response.status_code == 400:
             err_msg = "400 Error - Bad Request\n" + response.request.url + "\n" + response.request.data
             raise HTTPError(err_msg)
         result = self.make_cell_from_response(response)
         self.catalog_cell_visited(result)
-        move = self.add_move(action=action,direction=direction,reason=reason,result=result)
-        return move
+        action_and_result = self.add_action_and_result(action=action,direction=direction,reason=reason,result=result)
+        return action_and_result
 
     def get_cells_visited(self):
         return self._cells_visited
@@ -58,22 +61,22 @@ class DandDGame(object):
         self._cells_visited[cell.location] = copy.deepcopy(cell)
 
 
-    def action_move(self, direction, reason):
-        move_cell = self.get_api_result_cell(action="move",direction=direction,reason=reason)
-        return move_cell
+    def do_action_move(self, direction: Direction, reason: str):
+        action_and_result_cell = self.get_api_result_cell(action="move",direction=direction,reason=reason)
+        return action_and_result_cell
 
-    def get_moves(self):
-        return self._moves
+    def get_action_history(self) -> list:
+        return self._actions
 
-    def add_move(self, action, direction, reason, result):
-        move = WarriorMoveAndResult(
+    def add_action_and_result(self, action, direction, reason, result):
+        action_and_result = Action(
             action=action,
             direction=direction,
             reason=reason,
             result=copy.deepcopy(result)
         )
-        self._moves.append(move)
-        return move
+        self._actions.append(action_and_result)
+        return action_and_result
 
 
 BASE_URL = "http://54.85.100.225:8000"

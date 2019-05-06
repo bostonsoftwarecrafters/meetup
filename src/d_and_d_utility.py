@@ -1,25 +1,28 @@
-def location_in_direction_of(location, direction):
+from test_directions import Direction, NORTH, SOUTH, WEST, EAST
+
+
+def location_in_direction_of(location: str, direction: Direction):
     ret_letter = location[0]
     ret_number = location[1]
-    if direction == "north":
+    if direction == NORTH:
         new_letter_pos = (ord(ret_letter) - ord("A") - 1) % 10
         ret_letter = chr(ord("A") + new_letter_pos)
-    elif direction == "south":
+    elif direction == SOUTH:
         new_letter_pos = (ord(ret_letter) - ord("A") + 1) % 10
         ret_letter = chr(ord("A") + new_letter_pos)
-    elif direction == "west":
+    elif direction == WEST:
         ret_number = str((int(location[1])-1) % 10)
-    elif direction == "east":
+    elif direction == EAST:
         ret_number = str((int(location[1]) + 1) % 10)
     return ret_letter+ret_number
 
 
 def get_adjacent_locations(location):
     return (
-        location_in_direction_of(location,"north"),
-        location_in_direction_of(location,"south"),
-        location_in_direction_of(location,"east"),
-        location_in_direction_of(location,"west")
+        location_in_direction_of(location,NORTH),
+        location_in_direction_of(location,SOUTH),
+        location_in_direction_of(location,EAST),
+        location_in_direction_of(location,WEST)
     )
 
 

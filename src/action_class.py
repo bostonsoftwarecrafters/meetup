@@ -1,7 +1,9 @@
+import copy
+
 from src.cell_result_class import CellResult
 
 
-class WarriorMoveAndResult(object):
+class Action(object):
     def __init__(self,
                  action: str,
                  direction: str,
@@ -11,4 +13,4 @@ class WarriorMoveAndResult(object):
         self.action = action
         self.direction = direction
         self.reason = reason
-        self.result = result
+        self.result = copy.deepcopy(result)

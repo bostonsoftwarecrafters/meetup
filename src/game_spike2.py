@@ -44,12 +44,12 @@ def get_adjacent_locations(location):
     next_number_str = str((number + 1) % 10)
     adjacent_locations = [
         {"location": previous_letter + number_str,
-         "direction": "north"},
-        {"location": next_letter + number_str, "direction": "south"},
+         "direction": NORTH},
+        {"location": next_letter + number_str, "direction": SOUTH},
         {"location": letter + previous_number_str,
-         "direction": "west"},
+         "direction": WEST},
         {"location": letter + next_number_str,
-         "direction": "east"}
+         "direction": EAST}
     ]
     return adjacent_locations
 
@@ -79,7 +79,7 @@ def move_all_adjacent_safe_spaces(start_cell):
         print ("Not safe",start_cell["nearby"])
         return start_cell
     unknown_adjacent_locations = get_unknown_adjacent_locations(cell["location"])
-    direction_pairs = {"north": "south", "south": "north", "east": "west", "west": "east"}
+    direction_pairs = {NORTH: SOUTH, SOUTH: NORTH, EAST: WEST, WEST: EAST}
     cell_moved_to = copy.deepcopy(start_cell)
     for adjacent_location in unknown_adjacent_locations:
         direction_to_move = adjacent_location["direction"]
@@ -106,8 +106,8 @@ def get_killed_by(current_cell):
     status = current_cell["status"]
     if status == "Alive":
         killed_by = "";
-    elif "pit" in status:
-        killed_by = "pit";
+    elif "Pit" in status:
+        killed_by = "Pit";
     elif "dragon" in status:
         killed_by = "dragon"
     else:
@@ -230,8 +230,8 @@ def move_to_next_unexplored_cell(cell):
                 direction = unknown_adjacent_locations[0]["direction"]
                 cell_moved_to = move_warrior(get_unknown_adjacent_locations(direction,"unsafe move"))
                 return cell_moved_to
-            cell_moved_to = move_warrior("north","explore")
-        cell_moved_to = move_warrior("east","explore")
+            cell_moved_to = move_warrior(NORTH,"explore")
+        cell_moved_to = move_warrior(EAST,"explore")
     return cell_moved_to
 
 
@@ -256,14 +256,14 @@ for cell in cells_visited:
 #     if "Pit" in nearhere:
 #         dir = getrandomdir()
 #     elif "Rope" in nearhere or "Magic Arrow" in nearhere:
-#         result = moveWarrior("north").json()
-#         result = moveWarrior("south").json()
-#         result = moveWarrior("east").json()
-#         result = moveWarrior("west").json()
-#         result = moveWarrior("west").json()
-#         result = moveWarrior("east").json()
-#         result = moveWarrior("south").json()
-#         result = moveWarrior("north").json()
+#         result = moveWarrior(NORTH).json()
+#         result = moveWarrior(SOUTH).json()
+#         result = moveWarrior(EAST).json()
+#         result = moveWarrior(WEST).json()
+#         result = moveWarrior(WEST).json()
+#         result = moveWarrior(EAST).json()
+#         result = moveWarrior(SOUTH).json()
+#         result = moveWarrior(NORTH).json()
 #         print("**********" + str(result["inventory"]))
 #
 #     print(nearby)

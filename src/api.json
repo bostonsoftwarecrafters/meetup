@@ -98,13 +98,13 @@
                 "example_action_move_request": {
                     "POST (JSON)": {
                         "action": "move",
-                        "direction": "north"
+                        "direction": NORTH
                     }
                 },
                 "example_action_attack_request": {
                     "POST (JSON)": {
                         "action": "attack",
-                        "direction": "east"
+                        "direction": EAST
                     }
                 },
                 "example_game_over_response": {

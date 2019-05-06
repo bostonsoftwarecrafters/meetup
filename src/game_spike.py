@@ -20,13 +20,13 @@ def getrandomdir():
     print("********** moving in random direction")
     dirInt = random.randint(1,4)
     if dirInt == 1:
-        return "north"
+        return NORTH
     elif dirInt == 2:
-        return "south"
+        return SOUTH
     elif dirInt == 3:
-        return "east"
+        return EAST
     else:
-        return "west"
+        return WEST
 
 
 
@@ -57,14 +57,14 @@ for x in range(11):
     if "Pit" in nearhere:
         dir = getrandomdir()
     elif "Rope" in nearhere or "Magic Arrow" in nearhere:
-        result = moveWarrior("north").json()
-        result = moveWarrior("south").json()
-        result = moveWarrior("east").json()
-        result = moveWarrior("west").json()
-        result = moveWarrior("west").json()
-        result = moveWarrior("east").json()
-        result = moveWarrior("south").json()
-        result = moveWarrior("north").json()
+        result = moveWarrior(NORTH).json()
+        result = moveWarrior(SOUTH).json()
+        result = moveWarrior(EAST).json()
+        result = moveWarrior(WEST).json()
+        result = moveWarrior(WEST).json()
+        result = moveWarrior(EAST).json()
+        result = moveWarrior(SOUTH).json()
+        result = moveWarrior(NORTH).json()
 
     print(nearby)
 
