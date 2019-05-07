@@ -1,6 +1,6 @@
-from src.cell_result_class import CellResult
-from src.d_and_d_class import DNDGame
-from src.d_and_d_utility import location_in_direction_of, get_adjacent_locations, add_comma
+from cell_result_class import CellResult
+from d_and_d_class import DNDGame
+from d_and_d_utility import location_in_direction_of, get_adjacent_locations, add_comma
 
 class MockGame(DNDGame):
     def __init__(self, uid, location="G4"):

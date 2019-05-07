@@ -1,7 +1,7 @@
-from src.d_and_d_class import DNDGame
-from src.d_and_d_utility import location_in_direction_of
-from src.mock_game_class import MockGame
-from src.test_basic_play import TEST_ACCOUNT_UID
+from d_and_d_class import DNDGame
+from d_and_d_utility import location_in_direction_of
+from mock_game_class import MockGame
+from test_basic_play import TEST_ACCOUNT_UID
 from test_directions import NORTH, SOUTH, WEST, EAST
 
 

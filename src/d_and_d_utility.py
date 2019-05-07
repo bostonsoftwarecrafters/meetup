@@ -1,3 +1,4 @@
+from d_and_d_class import DNDGame
 from test_directions import Direction, NORTH, SOUTH, WEST, EAST
 
 
@@ -33,3 +34,15 @@ def add_comma(original_val, add_value):
         return original_val + "," + add_value
     else:
         return add_value
+
+
+def get_safe_game(uid) -> DNDGame:
+    game: DNDGame = DNDGame(uid)
+    while True:
+        nearby = game.get_action(0).result.nearby
+        if "Pit" not in nearby and "Bat" not in nearby and "Dragon" not in nearby:
+            break
+        game = DNDGame(uid)
+    return game
+
+

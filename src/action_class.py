@@ -1,6 +1,6 @@
 import copy
 
-from src.cell_result_class import CellResult
+from cell_result_class import CellResult
 
 
 class Action(object):

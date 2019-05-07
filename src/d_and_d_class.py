@@ -4,8 +4,8 @@ from typing import Optional
 import requests
 from requests import HTTPError
 
-from src.cell_result_class import CellResult
-from src.action_class import Action
+from cell_result_class import CellResult
+from action_class import Action
 from test_directions import Direction
 
 

@@ -1,4 +1,4 @@
-from src.mock_game_class import MockGame
+from mock_game_class import MockGame
 
 def test_nearby():
     mock_board_game = MockGame("A1")
