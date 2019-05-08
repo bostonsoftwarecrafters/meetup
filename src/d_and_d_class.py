@@ -6,7 +6,7 @@ from requests import HTTPError
 
 from cell_result_class import CellResult
 from action_class import Action
-from test_directions import Direction
+from direction_class import Direction
 
 
 class DNDGame(object):
@@ -65,7 +65,7 @@ class DNDGame(object):
         action_and_result_cell = self.get_api_result_cell(action="move",direction=direction,reason=reason)
         return action_and_result_cell
 
-    def get_action_history(self) -> list:
+    def get_actions(self) -> list:
         return self._actions
 
     def add_action_and_result(self, action, direction, reason, result):

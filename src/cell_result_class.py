@@ -12,3 +12,13 @@ class CellResult(object):
         self.inventory = inventory
         self.valid_actions = valid_actions
         self.nearby = nearby
+
+    def __eq__(self,obj):
+        return self.__dict__ == obj.__dict__
+
+    def __str__(self):
+        return "str: "+str(self.__dict__)
+
+    def __repr__(self):
+        return "rep: "+str(self.__dict__)
+

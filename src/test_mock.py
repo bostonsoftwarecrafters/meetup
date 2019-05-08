@@ -1,43 +1,43 @@
+import pytest
+
 from d_and_d_class import DNDGame
-from d_and_d_utility import location_in_direction_of
+from d_and_d_utility import print_game
 from mock_game_class import MockGame
-from test_basic_play import TEST_ACCOUNT_UID
-from test_directions import NORTH, SOUTH, WEST, EAST
+from test_basic_play import TEST_ACCOUNT_UID, functest_move_and_move_back
+from test_directions import NORTH, SOUTH, EAST, WEST
 
 
-def test_mock_create_game():
-    # game = DandDGame(TEST_ACCOUNT_UID)
+@pytest.fixture()
+def safe_mock_game_setup_teardown(request):
     mock_game = MockGame(TEST_ACCOUNT_UID)
+    tests_failed_before_module = request.session.testsfailed
+    yield mock_game
+    if request.session.testsfailed > tests_failed_before_module:
+        print("*******************************************")
+        print("*** MOCK MOVES EXECUTED AS PART OF TEST ***")
+        print("******************************************")
+        print_game(mock_game)
+
+
+
+def test_mock_create_game(safe_mock_game_setup_teardown):
+    mock_game = safe_mock_game_setup_teardown
     assert isinstance(mock_game, DNDGame)
-    assert len(mock_game.get_action_history()) == 1
+    assert len(mock_game.get_actions()) == 1
     assert len(mock_game.get_cells_visited()) == 1
 
-def test_define_init_cell():
-    mock_game = MockGame(TEST_ACCOUNT_UID, location="G3")
-    action_and_result = mock_game.get_action_history()[0]
+def test_mock_create_game_start_g3():
+    mock_game = MockGame(TEST_ACCOUNT_UID,"G3")
+    action_and_result = mock_game.get_actions()[0]
     cell_visited = mock_game.get_cells_visited()["G3"]
     assert action_and_result.action == "restart"
     assert cell_visited.location == "G3"
     assert action_and_result.result.location == "G3"
 
-def test_mock_all_directions():
-    game = MockGame(TEST_ACCOUNT_UID)
-    start_cell = game.get_action(0).result
-    north_cell = game.do_action_move(NORTH, "test north").result
-    north_cell_back = game.do_action_move(SOUTH, "test back south").result
-    south_cell = game.do_action_move(SOUTH, "test south").result
-    south_cell_back = game.do_action_move(NORTH, "test back north").result
-    west_cell = game.do_action_move(WEST, "test west").result
-    west_cell_back = game.do_action_move(EAST, "test back east").result
-    east_cell = game.do_action_move(EAST, "test east").result
-    east_cell_back = game.do_action_move(WEST, "test back west").result
-    # TODO: create assert, action_and_result in different directions
-    assert start_cell.location == \
-           north_cell_back.location == \
-           south_cell_back.location == \
-           west_cell_back.location == \
-           east_cell_back.location
-    assert location_in_direction_of(start_cell.location, NORTH) == north_cell.location
-    assert location_in_direction_of(start_cell.location, SOUTH) == south_cell.location
-    assert location_in_direction_of(start_cell.location, WEST) == west_cell.location
-    assert location_in_direction_of(start_cell.location, EAST) == east_cell.location
+def test_mock_move_in_all_directions(safe_mock_game_setup_teardown):
+    game = safe_mock_game_setup_teardown
+    functest_move_and_move_back(game=game, direction=NORTH)
+    functest_move_and_move_back(game=game, direction=SOUTH)
+    functest_move_and_move_back(game=game, direction=EAST)
+    functest_move_and_move_back(game=game, direction=WEST)
+

@@ -1,5 +1,6 @@
 from d_and_d_class import DNDGame
-from test_directions import Direction, NORTH, SOUTH, WEST, EAST
+from test_directions import NORTH, SOUTH, WEST, EAST
+from direction_class import Direction
 
 
 def location_in_direction_of(location: str, direction: Direction):
@@ -35,8 +36,14 @@ def add_comma(original_val, add_value):
     else:
         return add_value
 
+# TODO: make game immutable?
+def make_moves(game: DNDGame,directions, reason):
+    for direction in directions:
+        game.do_action_move(direction, reason=reason)
+    return game
 
-def get_safe_game(uid) -> DNDGame:
+
+def get_game_with_no_dangers_near_start(uid) -> DNDGame:
     game: DNDGame = DNDGame(uid)
     while True:
         nearby = game.get_action(0).result.nearby
@@ -46,3 +53,6 @@ def get_safe_game(uid) -> DNDGame:
     return game
 
 
+def print_game(game):
+    for move in game.get_actions():
+        print(move.action, move.direction, move.reason, move.result.location, move.result.nearby)

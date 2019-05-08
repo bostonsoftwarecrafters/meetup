@@ -2,7 +2,7 @@ from mock_game_class import MockGame
 
 def test_nearby():
     mock_board_game = MockGame("A1")
-    start_cell = mock_board_game.get_action_history()[0].result
+    start_cell = mock_board_game.get_actions()[0].result
     assert start_cell.nearby == ""
 
 def test_nearby_bats():

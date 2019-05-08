@@ -24,7 +24,7 @@ class MockGame(DNDGame):
             self.catalog_cell_visited(start_cell)
             return action_and_result
         elif action == "move":
-            move_list = self.get_action_history()
+            move_list = self.get_actions()
             current_cell = move_list[len(move_list)-1].result
             current_location = current_cell.location
             new_cell_location = location_in_direction_of(current_location,direction)
