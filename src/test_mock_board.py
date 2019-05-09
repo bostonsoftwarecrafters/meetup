@@ -30,10 +30,10 @@ def assert_using_nearby_function(cell, dnd_object):
 
 def functest_object_nearby(dnd_object):
     mock_game = MockGame("A1")
-    mock_game.add_object_location(dnd_object, "F3")
+    mock_game.catalog_object_location(dnd_object, "F3")
     g2_cell = mock_game.make_mock_cell("G2")
     assert g2_cell.nearby == ""
-    for location in mock_game.get_adjacent_locations("F3"):
+    for location in mock_game.get_adjacent_locations_all("F3"):
         cell = mock_game.make_mock_cell(location)
         assert_using_nearby_function(cell, dnd_object)
 

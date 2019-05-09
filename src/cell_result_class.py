@@ -25,6 +25,13 @@ class CellResult(object):
     def __repr__(self):
         return "rep: "+str(self.__dict__)
 
+    def get_nearby_dnd_objects(self):
+        ret_val = []
+        for dnd_object in DND_OBJECT:
+            if self.is_object_nearby(dnd_object):
+                ret_val.append(dnd_object)
+        return ret_val
+
     def is_bat_nearby(self):
         return self.is_object_nearby(DND_OBJECT.BAT)
 
@@ -42,13 +49,6 @@ class CellResult(object):
 
     def is_object_nearby(self,dnd_object):
         return dnd_object.value in self.nearby
-
-    def get_nearby_dnd_objects(self):
-        ret_val = []
-        for dnd_object in DND_OBJECT:
-            if self.is_object_nearby(dnd_object):
-                ret_val.append(dnd_object)
-        return ret_val
 
 
 

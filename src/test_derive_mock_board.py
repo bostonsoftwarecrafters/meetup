@@ -14,7 +14,7 @@ def play_mock_game(game: DNDGame):
     original_game_actions = game.get_actions()
     for index in range (1,len(original_game_actions)):
         action = original_game_actions[index]
-        new_action = mock_game.get_and_store_action_and_result(
+        new_action = mock_game.do_action_and_store(
             action=action.action,
             direction=action.direction,
             reason="Mock "+action.reason
