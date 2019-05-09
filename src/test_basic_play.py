@@ -1,6 +1,7 @@
 import pytest
 
-from d_and_d_utility import get_game_with_no_dangers_near_start, print_game
+from d_and_d_utility import print_game
+from d_and_d_game_helper import get_game_with_no_dangers_near_start
 from cell_result_class import CellResult
 from d_and_d_class import DNDGame
 from d_and_d_utility import location_in_direction_of
@@ -61,8 +62,10 @@ def test_WarriorMove():
 def test_move_back_to_same_cell(safe_game_setup_teardown):
     game = safe_game_setup_teardown
     start_action = game.get_action(0)
+    print("Start",start_action)
     first_move = game.do_action_move(direction=NORTH, reason="test")
     move_back = game.do_action_move(direction=SOUTH, reason="test")
+    print("Move",move_back)
     assert move_back.result.location == start_action.result.location
 
 

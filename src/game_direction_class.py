@@ -1,7 +1,7 @@
 from enum import Enum
 
 
-class Direction(Enum):
+class GameDirection(Enum):
     NORTH = "north"
     SOUTH = "south"
     WEST = "west"
@@ -15,3 +15,8 @@ class Direction(Enum):
             self.WEST: self.EAST
         }
         return opposites[self]
+
+NORTH = GameDirection.NORTH
+SOUTH = GameDirection.SOUTH
+WEST = GameDirection.WEST
+EAST = GameDirection.EAST

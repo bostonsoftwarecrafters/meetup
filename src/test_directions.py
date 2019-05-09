@@ -1,6 +1,6 @@
-from direction_class import Direction
+from game_direction_class import GameDirection, NORTH,SOUTH,WEST,EAST
 
-NORTH,SOUTH,WEST,EAST = (Direction.NORTH, Direction.SOUTH, Direction.WEST, Direction.EAST)
+# NORTH,SOUTH,WEST,EAST = (Direction.NORTH, Direction.SOUTH, Direction.WEST, Direction.EAST)
 
 def test_enum_direction():
     assert NORTH.value == "north"
@@ -9,10 +9,10 @@ def test_enum_direction():
     assert EAST.value == "east"
 
 def test_direction_constants():
-    assert Direction.NORTH == NORTH
-    assert Direction.SOUTH == SOUTH
-    assert Direction.WEST == WEST
-    assert Direction.EAST == EAST
+    assert GameDirection.NORTH == NORTH
+    assert GameDirection.SOUTH == SOUTH
+    assert GameDirection.WEST == WEST
+    assert GameDirection.EAST == EAST
 
 
 def test_opposite_direction():

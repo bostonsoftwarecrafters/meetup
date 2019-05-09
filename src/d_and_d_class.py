@@ -6,7 +6,8 @@ from requests import HTTPError
 
 from cell_result_class import CellResult
 from action_class import Action
-from direction_class import Direction
+from d_and_d_utility import location_in_direction_of
+from game_direction_class import GameDirection, NORTH, SOUTH, EAST, WEST
 
 
 class DNDGame(object):
@@ -35,11 +36,26 @@ class DNDGame(object):
     def get_action(self, index) -> Action:
         return self._actions[index]
 
-    def action_start_game(self):
-        result_cell = self.get_api_result_cell(action="restart")
-        print(result_cell)
+    def get_adjacent_locations(self,location):
+        return (
+            location_in_direction_of(location, NORTH),
+            location_in_direction_of(location, SOUTH),
+            location_in_direction_of(location, EAST),
+            location_in_direction_of(location, WEST)
+        )
 
-    def get_api_result_cell(self, action, direction: Optional[Direction] = None,reason=""):
+    def get_adjacent_locations_not_visited(self,location):
+        adjacent_locations = self.get_adjacent_locations(location)
+        ret_val = []
+        for location in adjacent_locations:
+            if not self.is_location_visited(location):
+                ret_val.append(location)
+
+    def action_start_game(self):
+        action = self.get_and_store_action_and_result(action="restart")
+
+
+    def get_and_store_action_and_result(self, action, direction: Optional[GameDirection] = None, reason="") -> Action:
         json_parameter = {"account_uuid": self.uuid,
                           "action": action}
 
@@ -51,8 +67,8 @@ class DNDGame(object):
             raise HTTPError(err_msg)
         result = self.make_cell_from_response(response)
         self.catalog_cell_visited(result)
-        action_and_result = self.add_action_and_result(action=action,direction=direction,reason=reason,result=result)
-        return action_and_result
+        new_action = self.add_action(action=action, direction=direction, reason=reason, result=result)
+        return new_action
 
     def get_cells_visited(self):
         return self._cells_visited
@@ -61,14 +77,14 @@ class DNDGame(object):
         self._cells_visited[cell.location] = copy.deepcopy(cell)
 
 
-    def do_action_move(self, direction: Direction, reason: str):
-        action_and_result_cell = self.get_api_result_cell(action="move",direction=direction,reason=reason)
+    def do_action_move(self, direction: GameDirection, reason: str):
+        action_and_result_cell = self.get_and_store_action_and_result(action="move", direction=direction, reason=reason)
         return action_and_result_cell
 
     def get_actions(self) -> list:
         return self._actions
 
-    def add_action_and_result(self, action, direction, reason, result):
+    def add_action(self, action, direction, reason, result):
         action_and_result = Action(
             action=action,
             direction=direction,
@@ -77,6 +93,13 @@ class DNDGame(object):
         )
         self._actions.append(action_and_result)
         return action_and_result
+
+    def is_location_visited(self,location):
+        try:
+            dummy = self.get_cell(location)
+            return True
+        except:
+            return False
 
 
 BASE_URL = "http://54.85.100.225:8000"

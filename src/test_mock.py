@@ -4,7 +4,7 @@ from d_and_d_class import DNDGame
 from d_and_d_utility import print_game
 from mock_game_class import MockGame
 from test_basic_play import TEST_ACCOUNT_UID, functest_move_and_move_back
-from test_directions import NORTH, SOUTH, EAST, WEST
+from game_direction_class import NORTH, SOUTH, EAST, WEST
 
 
 @pytest.fixture()

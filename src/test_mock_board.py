@@ -1,3 +1,4 @@
+from dnd_constants import DND_OBJECT
 from mock_game_class import MockGame
 
 def test_nearby():
@@ -5,17 +6,36 @@ def test_nearby():
     start_cell = mock_board_game.get_actions()[0].result
     assert start_cell.nearby == ""
 
-def test_nearby_bats():
-    mock_board_game = MockGame("A1")
-    mock_board_game.add_bat("F3")
-    f4_cell = mock_board_game.make_mock_cell("F4")
-    f2_cell = mock_board_game.make_mock_cell("F2")
-    e3_cell = mock_board_game.make_mock_cell("E3")
-    g3_cell = mock_board_game.make_mock_cell("G3")
-    g2_cell = mock_board_game.make_mock_cell("G2")
+def test_object_nearby_functions():
+    for dnd_object in DND_OBJECT:
+        functest_object_nearby(dnd_object)
 
+
+def assert_using_nearby_function(cell, dnd_object):
+    if dnd_object == DND_OBJECT.BAT:
+        assert cell.is_bat_nearby()
+    elif dnd_object == DND_OBJECT.DRAGON:
+        return cell.is_dragon_nearby()
+    elif dnd_object == DND_OBJECT.MAGIC_ARROW:
+        return cell.is_magic_arrow_nearby()
+    elif dnd_object == DND_OBJECT.PIT:
+        return cell.is_pit_nearby()
+    elif dnd_object == DND_OBJECT.ROPE:
+        return cell.is_rope_nearby()
+    else:
+        assert False
+
+
+
+
+def functest_object_nearby(dnd_object):
+    mock_game = MockGame("A1")
+    mock_game.add_object_location(dnd_object, "F3")
+    g2_cell = mock_game.make_mock_cell("G2")
     assert g2_cell.nearby == ""
-    assert f4_cell.nearby == "Bats"
-    assert f2_cell.nearby == "Bats"
-    assert g3_cell.nearby == "Bats"
-    assert e3_cell.nearby == "Bats"
+    for location in mock_game.get_adjacent_locations("F3"):
+        cell = mock_game.make_mock_cell(location)
+        assert_using_nearby_function(cell, dnd_object)
+
+
+

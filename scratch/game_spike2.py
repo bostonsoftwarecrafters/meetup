@@ -4,10 +4,10 @@ import copy
 letters = ["A","B","C","D","E","F","G","H","I","J"]
 UUID = 'bee769ac-b6b7-4eb0-b441-1c8ada77adb6'
 url = "http://54.85.100.225:8000"
-dd_dict = dict()
-cells_visited = []
-directions_moved = []
-nearby_dragon_cells = []
+# dd_dict = dict()
+# cells_visited = []
+# directions_moved = []
+# nearby_dragon_cells = []
 
 def get_cell(response):
     json_resp = response.json()
@@ -24,8 +24,8 @@ def get_cell(response):
 def print_cell(cell):
     print(cell)
 
-def get_unknown_adjacent_locations(location):
-    adjacent_locations = get_adjacent_locations(location)
+def get_unknown_adjacent_locations(game,location):
+    adjacent_locations = get_adjacent_locations(game,location)
     unknown_adjacent_locations = []
     for adjacent_location in adjacent_locations:
         if not is_location_defined(adjacent_location["location"]):

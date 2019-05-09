@@ -1,7 +1,7 @@
 import pickle
 
 from d_and_d_class import DNDGame
-from d_and_d_utility import make_moves
+from d_and_d_game_helper import make_moves
 from test_basic_play import TEST_ACCOUNT_UID, safe_game_setup_teardown
 from test_directions import NORTH, SOUTH, WEST, EAST
 
