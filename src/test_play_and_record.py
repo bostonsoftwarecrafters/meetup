@@ -5,7 +5,7 @@ import pytest
 from d_and_d_class import DNDGame
 from d_and_d_game_helper import make_moves, get_game_with_no_dangers_near_start
 from d_and_d_utility import print_game
-from test_basic_play import TEST_ACCOUNT_UID, safe_game_setup_teardown
+from test_basic_play import TEST_ACCOUNT_UID
 from test_directions import NORTH, SOUTH, WEST, EAST
 
 
@@ -18,6 +18,7 @@ class PlayGame(object):
     def get_game(self):
         return self._game
 
+#TODO: Change to use conftest.py
 @pytest.fixture
 def setup_teardown(request):
     print("Here")
