@@ -56,7 +56,7 @@ def get_adjacent_locations(location):
 
 def move_warrior(direction, reason):
     r = requests.post(url + "/api/game", json={'account_uuid': UUID, "action": "move",
-                                               "direction": direction})
+                                               "direction": direction.value})
     cell = get_cell(r)
     catalog(cell,direction, reason)
     if "Magic Arrow" in cell["inventory"] and "Dragon" in cell["nearby"]:

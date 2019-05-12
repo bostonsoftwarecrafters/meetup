@@ -42,8 +42,8 @@ def test_CellResult():
 def test_WarriorMove():
     action_and_result = Action(
         action="Move",
-        direction=SOUTH,
-        reason="safemove",
+        direction=SOUTH._value_,
+        reason="safe move",
         result=CellResult(
             location="A6",
             game="On",
@@ -70,8 +70,8 @@ def test_move_back_to_same_cell(safe_game_setup_teardown):
 
 
 # TODO use record (and history?) instead of catalog
-def test_record_actions_and_cells(safe_game_setup_teardown):
-    game = safe_game_setup_teardown
+def test_record_actions_and_cells(safe_game_fixture_setup_teardown):
+    game = safe_game_fixture_setup_teardown
     start_cell = game.get_action(0).result
     move_cell = game.do_action_move(NORTH, "test")
     assert len(game.get_cells_visited()) == 2

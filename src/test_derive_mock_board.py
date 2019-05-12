@@ -6,7 +6,8 @@ from test_mock import safe_mock_game_setup_teardown
 
 def derive_mock_game(game: DNDGame):
     mock_game = MockGame(game.get_action(0).result.location)
-    mock_game.calculate_adjacent_notvisited_cells()
+    # TODO: Add functions to find objects
+    # mock_game.find_pits_and_dragon()
     return mock_game
 
 def play_mock_game(game: DNDGame):
@@ -26,7 +27,7 @@ def play_mock_game(game: DNDGame):
 def test_generate_mock_board(safe_mock_game_setup_teardown):
     moves = [NORTH]
     game = safe_mock_game_setup_teardown
-    game = make_moves(game, moves,"Test Generate Mock Board")
+    game.make_move_directions(moves,"Test Generate Mock Board")
     mock_board = derive_mock_game(game)
     assert game.get_actions() == game.get_actions()
     # mock_game = make_mock_game(mock_board)

@@ -7,6 +7,7 @@ from test_basic_play import TEST_ACCOUNT_UID, functest_move_and_move_back
 from game_direction_class import NORTH, SOUTH, EAST, WEST
 
 
+#TODO: Move to conftest.py
 @pytest.fixture()
 def safe_mock_game_setup_teardown(request):
     mock_game = MockGame(TEST_ACCOUNT_UID)

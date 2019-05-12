@@ -11,6 +11,7 @@ from typing import Optional, Optional, Optional
 
 class DNDGame(object):
 
+
     def __init__(self, uuid: str):
         self._cells_visited = {}
         self._actions = []
@@ -99,3 +100,9 @@ class DNDGame(object):
                           )
         self.catalog_cell_visited(result_cell)
         return result_cell
+
+    # TODO: Create function that includes different reason for each direction
+    def make_move_directions(self, directions, reason):
+        for direction in directions:
+            self.do_action_move(direction, reason=reason)
+

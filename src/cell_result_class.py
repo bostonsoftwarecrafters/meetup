@@ -1,4 +1,6 @@
-from dnd_constants import DND_OBJECT
+#TODO Decide on whether to use enum or str
+from dnd_constants import BAT, DRAGON, MAGIC_ARROW, PIT, ROPE
+
 
 
 class CellResult(object):
@@ -25,30 +27,31 @@ class CellResult(object):
     def __repr__(self):
         return "rep: "+str(self.__dict__)
 
-    def get_nearby_dnd_objects(self):
-        ret_val = []
-        for dnd_object in DND_OBJECT:
-            if self.is_object_nearby(dnd_object):
-                ret_val.append(dnd_object)
-        return ret_val
+    # TODO: Complete this function
+    # def get_nearby_dnd_objects(self):
+    #     ret_val = []
+    #     for dnd_object in :
+    #         if self.is_object_nearby(dnd_object):
+    #             ret_val.append(dnd_object)
+    #     return ret_val
 
     def is_bat_nearby(self):
-        return self.is_object_nearby(DND_OBJECT.BAT)
+        return self.is_object_nearby(BAT)
 
     def is_magic_arrow_nearby(self):
-        return self.is_object_nearby(DND_OBJECT.MAGIC_ARROW)
+        return self.is_object_nearby(MAGIC_ARROW)
 
     def is_pit_nearby(self):
-        return self.is_object_nearby(DND_OBJECT.PIT)
+        return self.is_object_nearby(PIT)
 
     def is_dragon_nearby(self):
-        return self.is_object_nearby(DND_OBJECT.DRAGON)
+        return self.is_object_nearby(DRAGON)
 
     def is_rope_nearby(self):
-        return self.is_object_nearby(DND_OBJECT.ROPE)
+        return self.is_object_nearby(ROPE)
 
-    def is_object_nearby(self,dnd_object):
-        return dnd_object.value in self.nearby
+    def is_object_nearby(self,object_name):
+        return object_name in self.nearby
 
 
 

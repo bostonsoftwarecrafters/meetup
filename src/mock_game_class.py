@@ -4,7 +4,6 @@ from d_and_d_utility import add_comma, location_in_direction_of
 from dnd_constants import DND_OBJECT
 
 
-
 class MockGame(DNDGame):
     def __init__(self, uid, location="G4"):
         self._mock_start_location = location
@@ -14,17 +13,22 @@ class MockGame(DNDGame):
 
         super().__init__(uid)
 
+    # TODO: Implement functionality for below
+    # def find_stationary_objects(self):
+    #     self.find_pit()
+    #     self.find_dragon()
+    #     self.find_magic_arrow()
+    #     self.find_rope()
+    #
+    # def find_stationary_object(self,object_name):
+    #     for cell_location in self.get_cells_visited():
+    #         cell_visited: CellResult = self.get_cells_visited()[cell_location]
+    #         location = cell_visited.location
+    #         adjacent_locations = self.get_adjacent_locations_all(location)
+    #         if object_name not in cell_visited.get_nearby_dnd_objects():
+    #             self.set_not_nearby(adjacent_locations,object_name)
 
-    def calculate_adjacent_notvisited_cells(self):
-        for cell_location in self.get_cells_visited():
-            cell_visited: CellResult = self.get_cells_visited()[cell_location]
-            print("Visited",cell_visited)
-            location = cell_visited.location
-            adjacent_locations = self.get_adjacent_locations_all(location)
-            unknown_adjacent_locations = self.get_adjacent_locations_not_visited(location)
-            dnd_objects_not_nearby = set()
-            for dnd_object in DND_OBJECT:
-                pass
+
 
 
     def catalog_object_location(self, dnd_object, location):
