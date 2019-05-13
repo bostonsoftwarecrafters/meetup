@@ -1,3 +1,5 @@
+from action_to_take_class import ActionToTake
+
 BASE_URL = "http://54.85.100.225:8000"
 from action_class import Action
 from cell_result_class import CellResult
@@ -101,8 +103,12 @@ class DNDGame(object):
         self.catalog_cell_visited(result_cell)
         return result_cell
 
-    # TODO: Create function that includes different reason for each direction
-    def make_move_directions(self, directions, reason):
-        for direction in directions:
-            self.do_action_move(direction, reason=reason)
+    def do_actions(self, actions_to_take):
+        action_to_take : ActionToTake
+        for action_to_take in actions_to_take:
+            self.do_action_and_store(
+                action=action_to_take.action,
+                direction=action_to_take.direction,
+                reason=action_to_take.reason
+            )
 

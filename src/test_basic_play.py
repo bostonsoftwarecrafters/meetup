@@ -9,7 +9,6 @@ from test_directions import SOUTH, NORTH, WEST, EAST
 TEST_ACCOUNT_UID: str = 'bee769ac-b6b7-4eb0-b441-1c8ada77adb6'
 
 def test_CellResult_Equality():
-    print("A")
     result1 = CellResult(location="A6",
                         game="On",
                         status="Alive",
@@ -53,22 +52,14 @@ def test_WarriorMove():
     )
     assert isinstance(action_and_result, Action)
 
-
-# TODO can you start one move from death?
-
-
 def test_move_back_to_same_cell(safe_game_fixture_setup_teardown):
     game = safe_game_fixture_setup_teardown
     start_action = game.get_action(0)
-    print("Start",start_action)
     first_move = game.do_action_move(direction=NORTH, reason="test")
     move_back = game.do_action_move(direction=SOUTH, reason="test")
-    print("Move",move_back)
     assert move_back.result.location == start_action.result.location
 
-
-# TODO use record (and history?) instead of catalog
-def test_record_actions_and_cells(safe_game_fixture_setup_teardown):
+def test_catalog_actions_and_cells(safe_game_fixture_setup_teardown):
     game = safe_game_fixture_setup_teardown
     start_cell = game.get_action(0).result
     move_cell = game.do_action_move(NORTH, "test")

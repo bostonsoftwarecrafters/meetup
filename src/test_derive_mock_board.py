@@ -1,8 +1,8 @@
 from d_and_d_class import DNDGame
-from d_and_d_game_helper import make_moves
 from mock_game_class import MockGame
 from test_directions import NORTH, SOUTH, WEST, EAST
-from test_mock import safe_mock_game_setup_teardown
+from test_play_and_record import create_move_actions_to_take
+
 
 def derive_mock_game(game: DNDGame):
     mock_game = MockGame(game.get_action(0).result.location)
@@ -25,9 +25,10 @@ def play_mock_game(game: DNDGame):
     return mock_game
 
 def test_generate_mock_board(safe_mock_game_setup_teardown):
-    moves = [NORTH]
+    directions = [NORTH]
+    actions_to_take = create_move_actions_to_take(directions=directions, reason="Test Generate Mock Board")
     game = safe_mock_game_setup_teardown
-    game.make_move_directions(moves,"Test Generate Mock Board")
+    game.do_actions(actions_to_take)
     mock_board = derive_mock_game(game)
     assert game.get_actions() == game.get_actions()
     # mock_game = make_mock_game(mock_board)
