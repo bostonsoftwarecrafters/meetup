@@ -155,7 +155,7 @@ def catalog(cell,direction,reason):
     # define current_cell and catalog dd_dict
     current_location = cell["location"]
     cell_visited = {"location": current_location,"cell":cell,"direction":direction,"reason":reason}
-    cells_visited.append(cell_visited)
+    self.cells_visited.append(cell_visited)
     print(cell)
     # directions_moved.append({"direction":direction)
     if is_dd_dict_entry_defined(cell):

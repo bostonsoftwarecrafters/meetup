@@ -3,9 +3,10 @@ import copy
 from action_class import Action
 from cell_result_class import CellResult
 from d_and_d_class import DNDGame
-from d_and_d_utility import add_comma, location_in_direction_of
+from d_and_d_utility import add_comma,  location_in_direction_of
 from dnd_constants import DNDObjEnum, MAGIC_ARROW, ROPE, PIT, DRAGON, BAT
 from game_direction_class import GameDirection
+
 
 MOCK_UID = "MOCK.1234"
 class MockGame(DNDGame):
@@ -47,8 +48,13 @@ class MockGame(DNDGame):
             move_list = self.get_actions()
             source_cell = move_list[len(move_list)-1].result
             source_location = source_cell.location
+            source_move_index = len(move_list)-1
+            new_move_index = source_move_index + 1
             if source_cell.status == "Alive":
                 new_cell_location = location_in_direction_of(source_location,direction)
+                bat_fly_to = self.get_bat_fly_to(new_move_index, new_cell_location)
+                if bat_fly_to != "":
+                    new_cell_location = bat_fly_to
             else:
                 new_cell_location = source_location
             new_cell = self.make_mock_cell(new_cell_location)
@@ -56,7 +62,8 @@ class MockGame(DNDGame):
             self.update_danger(new_cell)
             self.remove_rope_if_pit(new_cell,source_cell)
             move = self.catalog_action(action=action, direction=direction, reason=reason, result=new_cell)
-            self.catalog_cell_visited(new_cell)
+            self.update_bats_nearby(move.result, new_move_index)
+            self.catalog_cell_visited(move.result)
             return move
 
     #TODO: Make inventory non-mutable
@@ -72,7 +79,7 @@ class MockGame(DNDGame):
         adjacent_locations = self.get_adjacent_locations_all(adjacent_location)
         ret_val = ''
         for adjacent_location in adjacent_locations:
-            for dnd_object in DNDObjEnum:
+            for dnd_object in (DRAGON,ROPE,MAGIC_ARROW,PIT):
                 if adjacent_location in self._object_locations[dnd_object]:
                     ret_val = add_comma(ret_val,dnd_object.value)
 
@@ -154,6 +161,17 @@ class MockGame(DNDGame):
         except:
             ret_val = ""
         return ret_val
+
+    def update_bats_nearby(self, result:CellResult, move_number):
+        if BAT.value in result.nearby:
+            return
+        for adjacent_location in self.get_adjacent_locations_all(result.location):
+            dummy = self.get_bat_fly_to(move_number+1,adjacent_location)
+            if dummy != "":
+                result.nearby = add_comma(result.nearby,BAT.value)
+                break
+
+
 
 
 

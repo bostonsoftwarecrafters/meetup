@@ -10,6 +10,17 @@ def test_bat(safe_mock_game_g3_setup_teardown):
     assert mock_game.get_bat_fly_to(move=2,location="G6") == ""
     assert mock_game.get_bat_fly_to(move=1,location="G5") == ""
 
+def test_bat_danger(safe_mock_game_g3_setup_teardown):
+    mock_game = safe_mock_game_g3_setup_teardown
+    mock_game.set_bat(move=3, location="G6",fly_to="C7")
+    action_1 = mock_game.do_action_move(EAST,"G4 - not near bats")
+    assert BAT.value not in action_1.result.nearby
+    action_2 = mock_game.do_action_move(EAST,"G5 - not near bats")
+    assert BAT.value in action_2.result.nearby
+    action_3 = mock_game.do_action_move(EAST,"G6 - bat will fly to C7")
+    assert action_3.result.location == "C7"
+
+
 
 #TODO: Find actual status
 def test_pit(safe_mock_game_g3_setup_teardown):
@@ -87,13 +98,11 @@ def test_safe_nearby(safe_mock_game_g3_setup_teardown):
 
 def test_object_nearby_functions(safe_mock_game_g3_setup_teardown):
     game = safe_mock_game_g3_setup_teardown
-    for dnd_object in DNDObjEnum:
+    for dnd_object in (PIT,DRAGON,MAGIC_ARROW,PIT):
         assert_nearby_for_each_adjacent_location(game, dnd_object)
 
 def assert_object_nearby(cell, dnd_object):
-    if dnd_object == DNDObjEnum.BAT:
-        assert cell.is_bat_nearby()
-    elif dnd_object == DNDObjEnum.DRAGON:
+    if dnd_object == DNDObjEnum.DRAGON:
         return cell.is_dragon_nearby()
     elif dnd_object == DNDObjEnum.MAGIC_ARROW:
         return cell.is_magic_arrow_nearby()
