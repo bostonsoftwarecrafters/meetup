@@ -4,12 +4,13 @@ from action_class import Action
 from cell_result_class import CellResult
 from d_and_d_class import DNDGame
 from d_and_d_utility import add_comma, location_in_direction_of
-from dnd_constants import DNDObjEnum, MAGIC_ARROW, ROPE, PIT, DRAGON
+from dnd_constants import DNDObjEnum, MAGIC_ARROW, ROPE, PIT, DRAGON, BAT
 from game_direction_class import GameDirection
 
 MOCK_UID = "MOCK.1234"
 class MockGame(DNDGame):
     def __init__(self, start_location):
+        self._bat_fly_to_on_move_location = {}
         self._derived_contents = {}
         self._mock_start_location = start_location
         self._object_locations = {}
@@ -143,6 +144,16 @@ class MockGame(DNDGame):
             rope_list = [ROPE.value]
             inventory_set = set(new_cell.inventory) - set(rope_list)
             new_cell.inventory = list (inventory_set)
+
+    def set_bat(self, move, location, fly_to):
+        self._bat_fly_to_on_move_location[(move,location)] = fly_to
+
+    def get_bat_fly_to(self, move, location):
+        try:
+            ret_val = self._bat_fly_to_on_move_location[(move, location)]
+        except:
+            ret_val = ""
+        return ret_val
 
 
 

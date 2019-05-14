@@ -49,16 +49,25 @@ class DNDGame(object):
         new_action = self.catalog_action(action=action, direction=direction, reason=reason, result=result)
         return new_action
 
-    def do_action_start(self):
-        action = self.do_action_and_store(action="restart")
-
     def do_action_move(self, direction: GameDirection, reason: str):
         action_and_result_cell = self.do_action_and_store(action="move", direction=direction, reason=reason)
         return action_and_result_cell
 
+    def do_action_start(self):
+        action = self.do_action_and_store(action="restart")
+
     def get_action(self, index) -> Action:
         return self._actions[index]
 
+
+    def do_actions(self, actions_to_take):
+        action_to_take : ActionToTake
+        for action_to_take in actions_to_take:
+            self.do_action_and_store(
+                action=action_to_take.action,
+                direction=action_to_take.direction,
+                reason=action_to_take.reason
+            )
 
     def get_actions(self) -> list:
         return self._actions
@@ -71,13 +80,13 @@ class DNDGame(object):
             location_in_direction_of(location, WEST)
         )
 
+
     def get_adjacent_locations_not_visited(self,location):
         adjacent_locations = self.get_adjacent_locations_all(location)
         ret_val = []
         for location in adjacent_locations:
             if not self.is_location_visited(location):
                 ret_val.append(location)
-
 
     def get_cell(self,location):
         return self._cells_visited[location]
@@ -103,14 +112,5 @@ class DNDGame(object):
                           )
         self.catalog_cell_visited(result_cell)
         return result_cell
-
-    def do_actions(self, actions_to_take):
-        action_to_take : ActionToTake
-        for action_to_take in actions_to_take:
-            self.do_action_and_store(
-                action=action_to_take.action,
-                direction=action_to_take.direction,
-                reason=action_to_take.reason
-            )
 
 
