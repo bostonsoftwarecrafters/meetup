@@ -3,12 +3,19 @@ from game_direction_class import NORTH, SOUTH, EAST, WEST
 from mock_game_class import MockGame
 from test_basic_play import functest_move_and_move_back
 
+#TODO: Find actual status
 def test_pit(safe_mock_game_g3_setup_teardown):
     mock_game = safe_mock_game_g3_setup_teardown
     mock_game.set_mock_object_location(PIT, "G5")
-    mock_game.do_action_move(EAST,"G4 - no pit")
-    mock_game.do_action_move(EAST,"G5 - pit")
-    mock_game.do_action_move(EAST,"G5 - cannot move")
+    action_1 = mock_game.do_action_move(EAST,"G4 - no pit")
+    assert action_1.result.status == "Alive"
+    action_2 = mock_game.do_action_move(EAST,"G5 - pit")
+    assert action_2.result.status != "Alive"
+    action_3 = mock_game.do_action_move(EAST,"G5 - cannot move")
+    assert action_3.result.status != "Alive"
+    assert action_3.result.location == "G5"
+
+
 
 
 def test_inventory(safe_mock_game_g3_setup_teardown):

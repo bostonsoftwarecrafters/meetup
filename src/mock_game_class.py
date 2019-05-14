@@ -4,7 +4,7 @@ from action_class import Action
 from cell_result_class import CellResult
 from d_and_d_class import DNDGame
 from d_and_d_utility import add_comma, location_in_direction_of
-from dnd_constants import DNDObjEnum, MAGIC_ARROW, ROPE
+from dnd_constants import DNDObjEnum, MAGIC_ARROW, ROPE, PIT
 from game_direction_class import GameDirection
 
 MOCK_UID = "MOCK.1234"
@@ -39,16 +39,20 @@ class MockGame(DNDGame):
             reason=""):
         if action == "restart":
             start_cell = CellResult(location=self._mock_start_location)
-            action_and_result = self.catalog_action(action=action, direction="N/A", reason=reason, result=start_cell)
+            action = self.catalog_action(action=action, direction="N/A", reason=reason, result=start_cell)
             self.catalog_cell_visited(start_cell)
-            return action_and_result
+            return action
         elif action == "move":
             move_list = self.get_actions()
             source_cell = move_list[len(move_list)-1].result
             source_location = source_cell.location
-            new_cell_location = location_in_direction_of(source_location,direction)
+            if source_cell.status == "Alive":
+                new_cell_location = location_in_direction_of(source_location,direction)
+            else:
+                new_cell_location = source_location
             new_cell = self.make_mock_cell(new_cell_location)
             self.update_mock_inventory(new_cell, source_cell.inventory)
+            self.update_danger(new_cell)
             move = self.catalog_action(action=action, direction=direction, reason=reason, result=new_cell)
             self.catalog_cell_visited(new_cell)
             return move
@@ -93,9 +97,9 @@ class MockGame(DNDGame):
     def do_action_start(self):
         action = self.do_action_and_store(action="restart")
 
-    def do_action_move(self, direction: GameDirection, reason: str):
-        action_and_result_cell = self.do_action_and_store(action="move", direction=direction, reason=reason)
-        return action_and_result_cell
+    def do_action_move(self, direction: GameDirection, reason: str) -> Action:
+        action = self.do_action_and_store(action="move", direction=direction, reason=reason)
+        return action
 
     def derive_contents(self):
         actions = self.get_actions()
@@ -122,8 +126,15 @@ class MockGame(DNDGame):
         action = actions[len(actions)-1]
         return action
 
+    #TODO Add add_object_location
     def get_object_locations(self, obj):
         return self._object_locations[obj]
+
+    def update_danger(self, new_cell):
+        location = new_cell.location
+        if location in self.get_object_locations(PIT):
+            new_cell.status = "Over"
+
 
 
 
