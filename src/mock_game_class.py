@@ -4,7 +4,7 @@ from action_class import Action
 from cell_result_class import CellResult
 from d_and_d_class import DNDGame
 from d_and_d_utility import add_comma, location_in_direction_of
-from dnd_constants import DNDObjEnum, MAGIC_ARROW, ROPE, PIT
+from dnd_constants import DNDObjEnum, MAGIC_ARROW, ROPE, PIT, DRAGON
 from game_direction_class import GameDirection
 
 MOCK_UID = "MOCK.1234"
@@ -53,6 +53,7 @@ class MockGame(DNDGame):
             new_cell = self.make_mock_cell(new_cell_location)
             self.update_mock_inventory(new_cell, source_cell.inventory)
             self.update_danger(new_cell)
+            self.remove_rope_if_pit(new_cell,source_cell)
             move = self.catalog_action(action=action, direction=direction, reason=reason, result=new_cell)
             self.catalog_cell_visited(new_cell)
             return move
@@ -132,8 +133,16 @@ class MockGame(DNDGame):
 
     def update_danger(self, new_cell):
         location = new_cell.location
-        if location in self.get_object_locations(PIT):
+        if location in self.get_object_locations(PIT) and ROPE.value not in new_cell.inventory:
             new_cell.status = "Over"
+        elif location in self.get_object_locations(DRAGON):
+            new_cell.status = "Over"
+
+    def remove_rope_if_pit(self, new_cell, source_cell):
+        if source_cell.location in self.get_object_locations(PIT):
+            rope_list = [ROPE.value]
+            inventory_set = set(new_cell.inventory) - set(rope_list)
+            new_cell.inventory = list (inventory_set)
 
 
 

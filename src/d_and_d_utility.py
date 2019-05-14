@@ -29,7 +29,7 @@ def add_comma(original_val, add_value):
 
 def print_game(game):
     for move in game.get_actions():
-        print(move.action, move.direction, move.reason, move.result.location, move.result.nearby)
+        print(move.action, move.direction, move.reason, "location",move.result.location, "nearby", move.result.nearby, "inventory",move.result.inventory)
 
 # TODO: Maybe get rid of this
 def create_move_actions_to_take(directions, reason):

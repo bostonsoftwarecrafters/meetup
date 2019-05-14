@@ -1,4 +1,4 @@
-from dnd_constants import DNDObjEnum, MAGIC_ARROW, ROPE, PIT
+from dnd_constants import DNDObjEnum, MAGIC_ARROW, ROPE, PIT, DRAGON
 from game_direction_class import NORTH, SOUTH, EAST, WEST
 from mock_game_class import MockGame
 from test_basic_play import functest_move_and_move_back
@@ -6,16 +6,45 @@ from test_basic_play import functest_move_and_move_back
 #TODO: Find actual status
 def test_pit(safe_mock_game_g3_setup_teardown):
     mock_game = safe_mock_game_g3_setup_teardown
+    assert_danger_over(mock_game, PIT)
+
+def test_dragon(safe_mock_game_g3_setup_teardown):
+    mock_game = safe_mock_game_g3_setup_teardown
+    assert_danger_over(mock_game,DRAGON)
+
+def test_pit_with_rope(safe_mock_game_g3_setup_teardown):
+    mock_game = safe_mock_game_g3_setup_teardown
+    mock_game.set_mock_object_location(ROPE, "G4")
     mock_game.set_mock_object_location(PIT, "G5")
-    action_1 = mock_game.do_action_move(EAST,"G4 - no pit")
+
+    action_1 = mock_game.do_action_move(EAST, "G4 - pick up rope")
     assert action_1.result.status == "Alive"
-    action_2 = mock_game.do_action_move(EAST,"G5 - pit")
+
+    action_2 = mock_game.do_action_move(EAST, "G5 - pit with rope")
+    assert action_2.result.status == "Alive"
+
+    action_3 = mock_game.do_action_move(EAST, "G5 - moves with rope")
+    assert action_3.result.status == "Alive"
+    assert action_3.result.location == "G6"
+
+    action_4 = mock_game.do_action_move(WEST,"Back to G5 - pit without rope")
+    assert action_4.result.status != "Alive"
+    assert action_4.result.location == "G5"
+
+    action_5 = mock_game.do_action_move(NORTH,"G5 - cannot move")
+    assert action_5.result.status != "Alive"
+    assert action_5.result.location == "G5"
+
+
+def assert_danger_over(mock_game, obj):
+    mock_game.set_mock_object_location(obj, "G5")
+    action_1 = mock_game.do_action_move(EAST, "G4 - no pit")
+    assert action_1.result.status == "Alive"
+    action_2 = mock_game.do_action_move(EAST, "G5 - pit")
     assert action_2.result.status != "Alive"
-    action_3 = mock_game.do_action_move(EAST,"G5 - cannot move")
+    action_3 = mock_game.do_action_move(EAST, "G5 - cannot move")
     assert action_3.result.status != "Alive"
     assert action_3.result.location == "G5"
-
-
 
 
 def test_inventory(safe_mock_game_g3_setup_teardown):
