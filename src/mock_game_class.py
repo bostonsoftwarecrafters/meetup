@@ -1,5 +1,4 @@
 import copy
-from tokenize import String
 
 from action_class import Action
 from cell_result_class import CellResult
@@ -12,9 +11,7 @@ from game_direction_class import GameDirection
 MOCK_UID = "MOCK.1234"
 class MockGame(DNDGame):
     def __init__(self, start_location):
-        self._derived_bats = {}
         self._bat_fly_to_on_move_location = {}
-        self._derived_contents = {}
         self._mock_start_location = start_location
         self._object_locations = {}
         for object_enum in DNDObjEnum:
@@ -97,34 +94,6 @@ class MockGame(DNDGame):
         action = self.do_action_and_store(action="move", direction=direction, reason=reason)
         return action
 
-    def derive_contents(self):
-        actions = self.get_actions()
-        for action_index in range (1, len(actions)):
-            curr_action:Action = actions[action_index]
-            curr_location = curr_action.result.location
-
-            curr_inventory = curr_action.result.inventory
-            prev_action:Action = actions[action_index-1]
-            prev_inventory = prev_action.result.inventory
-            new_inventory_set = set(curr_inventory) - set(prev_inventory)
-            self.set_location_derived_content(curr_location,list(new_inventory_set))
-
-            upper_status = curr_action.result.status.upper()
-            if DRAGON.value.upper() in upper_status:
-                self.set_location_derived_content(curr_location,[DRAGON.value])
-            elif PIT.value.upper() in upper_status:
-                self.set_location_derived_content(curr_location,[PIT.value])
-
-            predicted_location = location_in_direction_of(prev_action.result.location, curr_action.direction)
-            if predicted_location != curr_location:
-                self.derive_bat(action_index,predicted_location,curr_location)
-
-
-    def get_derived_content_of_location(self,location):
-        return self._derived_contents[location]
-
-    def set_location_derived_content(self, location, objects):
-        self._derived_contents[location] = objects
 
     def get_derived_contents(self):
         return self._derived_contents
@@ -169,19 +138,6 @@ class MockGame(DNDGame):
             if dummy != "":
                 result.nearby = add_comma(result.nearby,BAT.value)
                 break
-
-    def derive_bat(self, action_index, bat_location, fly_to):
-        self._derived_bats[action_index, bat_location] = fly_to
-
-    def get_derived_fly_to(self, action_index, bat_location):
-        try:
-            ret_val = self._derived_bats[action_index, bat_location]
-        except:
-            ret_val = ""
-        return ret_val
-
-    def get_derived_fly_tos(self):
-        return copy.deepcopy(self._derived_bats)
 
 
 

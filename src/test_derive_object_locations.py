@@ -5,7 +5,7 @@ from test_basic_play import TEST_ACCOUNT_UID
 from mock_game_utility import derive_mock_game
 from d_and_d_utility import create_move_actions_to_take
 
-def test_derive_bat(safe_mock_game_g3_setup_teardown):
+def test_derive_bat_visited(safe_mock_game_g3_setup_teardown):
     mock_game = safe_mock_game_g3_setup_teardown
     mock_game.set_mock_bat(move=3, location="G6", fly_to="C7")
     action_1 = mock_game.do_action_move(EAST,"G4 - not near bats")

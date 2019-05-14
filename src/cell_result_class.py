@@ -31,13 +31,17 @@ class CellResult(object):
     def __repr__(self):
         return "rep: "+str(self.__dict__)
 
-    # TODO: Complete this function
-    # def get_nearby_dnd_objects(self):
-    #     ret_val = []
-    #     for dnd_object in :
-    #         if self.is_object_nearby(dnd_object):
-    #             ret_val.append(dnd_object)
-    #     return ret_val
+
+    def key_fields_equal(self,obj):
+        try:
+            ret_val = self.nearby == obj.nearby \
+                      and self.inventory == obj.inventory \
+                      and self.status == obj.status \
+                      and self.location == obj.location
+        except:
+            ret_val = False
+        return ret_val
+
 
     def is_bat_nearby(self):
         return self.is_object_nearby(BAT)

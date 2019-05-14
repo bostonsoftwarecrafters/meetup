@@ -3,6 +3,7 @@ from action_to_take_class import ActionToTake
 from action_class import Action
 from cell_result_class import CellResult
 from d_and_d_utility import location_in_direction_of
+from dnd_constants import DRAGON, PIT
 from game_direction_class import GameDirection, NORTH, SOUTH, EAST, WEST
 import copy
 import requests
@@ -15,6 +16,8 @@ class DNDGame(object):
 
 
     def __init__(self, uuid: str):
+        self._derived_bats = {}
+        self._derived_contents = {}
         self._cells_visited = {}
         self._actions = []
         self.uuid = uuid
@@ -115,5 +118,77 @@ class DNDGame(object):
                           )
         self.catalog_cell_visited(result_cell)
         return result_cell
+
+    def derive_visited_objects(self):
+        actions = self.get_actions()
+        for action_index in range(1, len(actions)):
+            curr_action: Action = actions[action_index]
+            curr_location = curr_action.result.location
+            prev_action = actions[action_index-1]
+
+            inventory_content = self.derive_content_visited_inventory(action_index)
+            self.add_location_derived_content(curr_location, inventory_content)
+
+            danger_content = self.derive_content_danger_visited(action_index)
+            self.add_location_derived_content(curr_location,danger_content)
+
+            predicted_location = location_in_direction_of(prev_action.result.location, curr_action.direction)
+            if predicted_location != curr_location:
+                self.derive_bat(action_index, predicted_location, curr_location)
+
+    def derive_contents(self):
+
+        self.derive_visited_objects()
+
+    def derive_content_danger_visited(self, action_index):
+        curr_action = self.get_action(action_index)
+        upper_status = curr_action.result.status.upper()
+        if DRAGON.value.upper() in upper_status:
+            ret_val = [DRAGON.value]
+        elif PIT.value.upper() in upper_status:
+            ret_val = [PIT.value]
+        else:
+            ret_val = []
+        return ret_val
+
+    def derive_content_visited_inventory(self, curr_action_index):
+        actions = self.get_actions()
+        curr_action = actions[curr_action_index]
+        curr_result = curr_action.result
+        curr_location = curr_result.location
+        curr_inventory = curr_result.inventory
+        prev_action: Action = actions[curr_action_index - 1]
+        prev_inventory = prev_action.result.inventory
+        new_inventory_set = set(curr_inventory) - set(prev_inventory)
+        return list(new_inventory_set)
+
+    def get_derived_content_of_location(self,location):
+        return self._derived_contents[location]
+
+    def add_location_derived_content(self, location, objects):
+        derived_dict = self._derived_contents
+        self.init_derived_location(target_dictionary=derived_dict,
+                                   location=location, value=[])
+        for obj in objects:
+            self._derived_contents[location] = objects
+
+    def init_derived_location(self, target_dictionary, location, value):
+        try:
+            dummy = target_dictionary[location]
+        except:
+            target_dictionary[location] = value
+
+    def derive_bat(self, action_index, bat_location, fly_to):
+        self._derived_bats[action_index, bat_location] = fly_to
+
+    def get_derived_fly_to(self, action_index, bat_location):
+        try:
+            ret_val = self._derived_bats[action_index, bat_location]
+        except:
+            ret_val = ""
+        return ret_val
+
+    def get_derived_fly_tos(self):
+        return copy.deepcopy(self._derived_bats)
 
 
