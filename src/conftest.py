@@ -19,8 +19,8 @@ def safe_game_fixture_setup_teardown(request):
 
 
 @pytest.fixture()
-def safe_mock_game_setup_teardown(request):
-    mock_game = MockGame(TEST_ACCOUNT_UID)
+def safe_mock_game_g3_setup_teardown(request) -> MockGame:
+    mock_game = MockGame("G3")
     tests_failed_before_module = request.session.testsfailed
     yield mock_game
     if request.session.testsfailed > tests_failed_before_module:

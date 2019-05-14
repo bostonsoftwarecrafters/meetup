@@ -1,16 +1,20 @@
 #TODO Decide on whether to use enum or str
-from dnd_constants import BAT, DRAGON, MAGIC_ARROW, PIT, ROPE
+from dnd_constants import BAT, DRAGON, MAGIC_ARROW, PIT, ROPE, DNDObjEnum
 
-
-
+#TODO: Change nearby to use list
+#TODO: Make immutable
 class CellResult(object):
     def __init__(self,
                  location: str,
                  game: str = "On",
                  status: str = "Alive",
-                 inventory: list = (""),
-                 valid_actions: list = (""),
+                 inventory: list=None,
+                 valid_actions: list=None,
                  nearby: str = ""):
+        if inventory is None:
+            inventory = list()
+        elif valid_actions is None:
+            valid_actions = list()
         self.location = location
         self.game = game
         self.status = status
@@ -50,8 +54,8 @@ class CellResult(object):
     def is_rope_nearby(self):
         return self.is_object_nearby(ROPE)
 
-    def is_object_nearby(self,object_name):
-        return object_name in self.nearby
+    def is_object_nearby(self,objectEnum:DNDObjEnum):
+        return objectEnum.value in self.nearby
 
 
 

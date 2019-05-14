@@ -1,15 +1,8 @@
 import pickle
 
-from action_to_take_class import ActionToTake
 from d_and_d_class import DNDGame
+from d_and_d_utility import create_move_actions_to_take
 from test_directions import NORTH, SOUTH, WEST, EAST
-
-
-def create_move_actions_to_take(directions, reason):
-    ret_val = []
-    for direction in directions:
-        ret_val.append(ActionToTake(action="move", direction=direction, reason=reason))
-    return ret_val
 
 
 def test_play_moves(safe_game_fixture_setup_teardown):

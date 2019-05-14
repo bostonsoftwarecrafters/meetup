@@ -1,17 +1,21 @@
+import copy
+
+from action_class import Action
 from cell_result_class import CellResult
 from d_and_d_class import DNDGame
 from d_and_d_utility import add_comma, location_in_direction_of
-from dnd_constants import DND_OBJECT
+from dnd_constants import DNDObjEnum, MAGIC_ARROW, ROPE
+from game_direction_class import GameDirection
 
-
+MOCK_UID = "MOCK.1234"
 class MockGame(DNDGame):
-    def __init__(self, uid, location="G4"):
-        self._mock_start_location = location
+    def __init__(self, start_location):
+        self._derived_contents = {}
+        self._mock_start_location = start_location
         self._object_locations = {}
-        for object_enum in DND_OBJECT:
+        for object_enum in DNDObjEnum:
             self._object_locations[object_enum] = []
-
-        super().__init__(uid)
+        super().__init__(MOCK_UID)
 
     # TODO: Implement functionality for below
     # def find_stationary_objects(self):
@@ -28,12 +32,6 @@ class MockGame(DNDGame):
     #         if object_name not in cell_visited.get_nearby_dnd_objects():
     #             self.set_not_nearby(adjacent_locations,object_name)
 
-
-
-
-    def catalog_object_location(self, dnd_object, location):
-        self._object_locations[dnd_object].append(location)
-
     def do_action_and_store(
             self,
             action,
@@ -46,20 +44,29 @@ class MockGame(DNDGame):
             return action_and_result
         elif action == "move":
             move_list = self.get_actions()
-            current_cell = move_list[len(move_list)-1].result
-            current_location = current_cell.location
-            new_cell_location = location_in_direction_of(current_location,direction)
-
+            source_cell = move_list[len(move_list)-1].result
+            source_location = source_cell.location
+            new_cell_location = location_in_direction_of(source_location,direction)
             new_cell = self.make_mock_cell(new_cell_location)
+            self.update_mock_inventory(new_cell, source_cell.inventory)
             move = self.catalog_action(action=action, direction=direction, reason=reason, result=new_cell)
             self.catalog_cell_visited(new_cell)
             return move
 
-    def get_nearby(self, adjacent_location):
+    #TODO: Make inventory non-mutable
+    def update_mock_inventory(self, new_cell:CellResult, previous_inventory):
+        new_cell.inventory = copy.deepcopy(previous_inventory)
+        for obj in (MAGIC_ARROW, ROPE):
+            if new_cell.location in self.get_object_locations(obj):
+                if obj.value not in new_cell.inventory:
+                    new_cell.inventory.append (obj.value)
+
+
+    def get_mock_nearby(self, adjacent_location):
         adjacent_locations = self.get_adjacent_locations_all(adjacent_location)
         ret_val = ''
         for adjacent_location in adjacent_locations:
-            for dnd_object in DND_OBJECT:
+            for dnd_object in DNDObjEnum:
                 if adjacent_location in self._object_locations[dnd_object]:
                     ret_val = add_comma(ret_val,dnd_object.value)
 
@@ -67,10 +74,58 @@ class MockGame(DNDGame):
 
     def make_mock_cell(self, location) -> CellResult:
         ret_val = CellResult(location=location)
-        self.set_nearby(ret_val)
+        self.set_mock_nearby(ret_val)
         return ret_val
 
-    def set_nearby(self, CellResult):
+    def set_mock_nearby(self, CellResult):
         location = CellResult.location
-        CellResult.nearby = self.get_nearby(location)
+        CellResult.nearby = self.get_mock_nearby(location)
+
+    def set_mock_object_location(self, dnd_object, location):
+        #TODO: See if can shorten
+        record: list
+        # try:
+        record = self._object_locations[dnd_object]
+        # except:
+        #     record = self._object_locations[dnd_object] = []
+        record.append(location)
+
+    def do_action_start(self):
+        action = self.do_action_and_store(action="restart")
+
+    def do_action_move(self, direction: GameDirection, reason: str):
+        action_and_result_cell = self.do_action_and_store(action="move", direction=direction, reason=reason)
+        return action_and_result_cell
+
+    def derive_contents(self):
+        actions = self.get_actions()
+        for action_index in range (1, len(actions)):
+            curr_action:Action = actions[action_index]
+            curr_inventory = curr_action.result.inventory
+            curr_location = curr_action.result.location
+            prev_action:Action = actions[action_index-1]
+            prev_inventory = prev_action.result.inventory
+            new_inventory_set = set(curr_inventory) - set(prev_inventory)
+            self.set_location_derived_content(curr_location,list(new_inventory_set))
+
+    def get_derived_content_of_location(self,location):
+        return self._derived_contents[location]
+
+    def set_location_derived_content(self, location, objects):
+        self._derived_contents[location] = objects
+
+    def get_derived_contents(self):
+        return self._derived_contents
+
+    def get_last_action(self) -> Action:
+        actions = self.get_actions()
+        action = actions[len(actions)-1]
+        return action
+
+    def get_object_locations(self, obj):
+        return self._object_locations[obj]
+
+
+
+
 

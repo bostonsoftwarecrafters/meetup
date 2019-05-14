@@ -1,3 +1,4 @@
+from action_to_take_class import ActionToTake
 from test_directions import NORTH, SOUTH, WEST, EAST
 from game_direction_class import GameDirection
 
@@ -29,3 +30,10 @@ def add_comma(original_val, add_value):
 def print_game(game):
     for move in game.get_actions():
         print(move.action, move.direction, move.reason, move.result.location, move.result.nearby)
+
+# TODO: Maybe get rid of this
+def create_move_actions_to_take(directions, reason):
+    ret_val = []
+    for direction in directions:
+        ret_val.append(ActionToTake(action="move", direction=direction, reason=reason))
+    return ret_val

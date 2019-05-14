@@ -1,6 +1,5 @@
 from action_to_take_class import ActionToTake
 
-BASE_URL = "http://54.85.100.225:8000"
 from action_class import Action
 from cell_result_class import CellResult
 from d_and_d_utility import location_in_direction_of
@@ -8,8 +7,9 @@ from game_direction_class import GameDirection, NORTH, SOUTH, EAST, WEST
 import copy
 import requests
 from requests import HTTPError
+BASE_URL = "http://54.85.100.225:8000"
 
-from typing import Optional, Optional, Optional
+from typing import Optional
 
 class DNDGame(object):
 
@@ -18,6 +18,7 @@ class DNDGame(object):
         self._cells_visited = {}
         self._actions = []
         self.uuid = uuid
+
         self.do_action_start()
 
     def catalog_action(self, action, direction, reason, result):
@@ -111,4 +112,5 @@ class DNDGame(object):
                 direction=action_to_take.direction,
                 reason=action_to_take.reason
             )
+
 
