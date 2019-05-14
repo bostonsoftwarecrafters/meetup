@@ -5,14 +5,16 @@ from test_basic_play import functest_move_and_move_back
 
 def test_bat(safe_mock_game_g3_setup_teardown):
     mock_game = safe_mock_game_g3_setup_teardown
-    mock_game.set_bat(move=2, location="G5",fly_to="C7")
+    mock_game.set_mock_bat(move=2, location="G5", fly_to="C7")
     assert mock_game.get_bat_fly_to(move=2,location="G5") == "C7"
     assert mock_game.get_bat_fly_to(move=2,location="G6") == ""
     assert mock_game.get_bat_fly_to(move=1,location="G5") == ""
 
+
+
 def test_bat_danger(safe_mock_game_g3_setup_teardown):
     mock_game = safe_mock_game_g3_setup_teardown
-    mock_game.set_bat(move=3, location="G6",fly_to="C7")
+    mock_game.set_mock_bat(move=3, location="G6", fly_to="C7")
     action_1 = mock_game.do_action_move(EAST,"G4 - not near bats")
     assert BAT.value not in action_1.result.nearby
     action_2 = mock_game.do_action_move(EAST,"G5 - not near bats")

@@ -10,8 +10,3 @@ def get_game_with_no_dangers_near_start(uid) -> DNDGame:
         game = DNDGame(uid)
     return game
 
-
-def make_moves(game: DNDGame,directions, reason):
-    for direction in directions:
-        game.do_action_move(direction, reason=reason)
-    return game

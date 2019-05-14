@@ -63,11 +63,14 @@ class DNDGame(object):
     def do_actions(self, actions_to_take):
         action_to_take : ActionToTake
         for action_to_take in actions_to_take:
-            self.do_action_and_store(
+            action = self.do_action_and_store(
                 action=action_to_take.action,
                 direction=action_to_take.direction,
                 reason=action_to_take.reason
             )
+            if action.result.status != "Alive":
+                break
+
 
     def get_actions(self) -> list:
         return self._actions
