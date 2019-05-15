@@ -1,9 +1,8 @@
 from action_to_take_class import ActionToTake
-
+from dnd_constants import DRAGON_STR, PIT_STR
 from action_class import Action
 from cell_result_class import CellResult
 from d_and_d_utility import location_in_direction_of
-from dnd_constants import DRAGON, PIT
 from game_direction_class import GameDirection, NORTH, SOUTH, EAST, WEST
 import copy
 import requests
@@ -93,6 +92,15 @@ class DNDGame(object):
         for location in adjacent_locations:
             if not self.is_location_visited(location):
                 ret_val.append(location)
+        return ret_val
+
+    def get_adjacent_locations_visited(self,location):
+        adjacent_locations = self.get_adjacent_locations_all(location)
+        ret_val = []
+        for location in adjacent_locations:
+            if self.is_location_visited(location):
+                ret_val.append(location)
+        return ret_val
 
     def get_cell(self,location):
         return self._cells_visited[location]
@@ -139,14 +147,16 @@ class DNDGame(object):
     def derive_contents(self):
 
         self.derive_visited_objects()
+        print("Debug a",self._derived_contents)
+        self.derive_contents_of_unknown_adjacent_cells()
 
     def derive_content_danger_visited(self, action_index):
         curr_action = self.get_action(action_index)
         upper_status = curr_action.result.status.upper()
-        if DRAGON.value.upper() in upper_status:
-            ret_val = [DRAGON.value]
-        elif PIT.value.upper() in upper_status:
-            ret_val = [PIT.value]
+        if DRAGON_STR.upper() in upper_status:
+            ret_val = [DRAGON_STR]
+        elif PIT_STR.upper() in upper_status:
+            ret_val = [PIT_STR]
         else:
             ret_val = []
         return ret_val
@@ -190,5 +200,28 @@ class DNDGame(object):
 
     def get_derived_fly_tos(self):
         return copy.deepcopy(self._derived_bats)
+
+    def derive_contents_of_unknown_adjacent_cells(self):
+        pass
+        # visited_cells = self.get_cells_visited()
+        # for visited_cell in visited_cells:
+        #     location = visited_cell.location
+        #     adjacent_locations = self.get_adjacent_locations_all(location)
+        #     unknown_adjacent_locations = self.get_adjacent_locations_not_visited(location)
+        #     if len(unknown_adjacent_locations) == 0:
+        #         pass
+        #     elif visited_cell.nearby == "":
+        #         for unknown_adjacent_location in unknown_adjacent_locations:
+        #             self.add_location_derived_content(unknown_adjacent_location,[])
+        #     else:
+        #         things_nearby = ""
+        #         for adjacent_location in adjacent_locations:
+        #             for ''
+
+    def get_derived_contents(self):
+        return copy.deepcopy(self._derived_contents)
+
+
+
 
 

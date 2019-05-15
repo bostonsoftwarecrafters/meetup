@@ -1,5 +1,5 @@
 #TODO Decide on whether to use enum or str
-from dnd_constants import BAT, DRAGON, MAGIC_ARROW, PIT, ROPE, DNDObjEnum
+from dnd_constants import BAT_STR, DRAGON_STR, MAGIC_ARROW_STR, PIT_STR, ROPE_STR
 
 #TODO: Change nearby to use list
 #TODO: Make immutable
@@ -33,6 +33,9 @@ class CellResult(object):
 
 
     def key_fields_equal(self,obj):
+        print("debug")
+        print(self.location,"n",self.nearby,"i",self.inventory,self.status)
+        print(obj.location,"n",obj.nearby,"i",obj.inventory,obj.status)
         try:
             ret_val = self.nearby == obj.nearby \
                       and self.inventory == obj.inventory \
@@ -44,22 +47,22 @@ class CellResult(object):
 
 
     def is_bat_nearby(self):
-        return self.is_object_nearby(BAT)
+        return self.is_object_nearby(BAT_STR)
 
     def is_magic_arrow_nearby(self):
-        return self.is_object_nearby(MAGIC_ARROW)
+        return self.is_object_nearby(MAGIC_ARROW_STR)
 
     def is_pit_nearby(self):
-        return self.is_object_nearby(PIT)
+        return self.is_object_nearby(PIT_STR)
 
     def is_dragon_nearby(self):
-        return self.is_object_nearby(DRAGON)
+        return self.is_object_nearby(DRAGON_STR)
 
     def is_rope_nearby(self):
-        return self.is_object_nearby(ROPE)
+        return self.is_object_nearby(ROPE_STR)
 
-    def is_object_nearby(self,objectEnum:DNDObjEnum):
-        return objectEnum.value in self.nearby
+    def is_object_nearby(self,object_str):
+        return object_str in self.nearby
 
 
 

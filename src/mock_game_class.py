@@ -4,7 +4,7 @@ from action_class import Action
 from cell_result_class import CellResult
 from d_and_d_class import DNDGame
 from d_and_d_utility import add_comma,  location_in_direction_of
-from dnd_constants import DNDObjEnum, MAGIC_ARROW, ROPE, PIT, DRAGON, BAT
+from dnd_constants import MAGIC_ARROW_STR, ROPE_STR, PIT_STR, DRAGON_STR, BAT_STR
 from game_direction_class import GameDirection
 
 
@@ -14,8 +14,8 @@ class MockGame(DNDGame):
         self._bat_fly_to_on_move_location = {}
         self._mock_start_location = start_location
         self._object_locations = {}
-        for object_enum in DNDObjEnum:
-            self._object_locations[object_enum] = []
+        for object_str in (DRAGON_STR,PIT_STR,MAGIC_ARROW_STR,ROPE_STR):
+            self._object_locations[object_str] = []
         super().__init__(MOCK_UID)
 
     def do_action_and_store(
@@ -53,19 +53,19 @@ class MockGame(DNDGame):
     #TODO: Make inventory non-mutable
     def update_mock_inventory(self, new_cell:CellResult, previous_inventory):
         new_cell.inventory = copy.deepcopy(previous_inventory)
-        for obj in (MAGIC_ARROW, ROPE):
-            if new_cell.location in self.get_object_locations(obj):
-                if obj.value not in new_cell.inventory:
-                    new_cell.inventory.append (obj.value)
+        for obj_str in (MAGIC_ARROW_STR, ROPE_STR):
+            if new_cell.location in self.get_object_locations(obj_str):
+                if obj_str not in new_cell.inventory:
+                    new_cell.inventory.append (obj_str)
 
 
     def get_mock_nearby(self, adjacent_location):
         adjacent_locations = self.get_adjacent_locations_all(adjacent_location)
         ret_val = ''
         for adjacent_location in adjacent_locations:
-            for dnd_object in (DRAGON,ROPE,MAGIC_ARROW,PIT):
-                if adjacent_location in self._object_locations[dnd_object]:
-                    ret_val = add_comma(ret_val,dnd_object.value)
+            for object_str in (DRAGON_STR,ROPE_STR,MAGIC_ARROW_STR,PIT_STR):
+                if adjacent_location in self._object_locations[object_str]:
+                    ret_val = add_comma(ret_val,object_str)
 
         return ret_val
 
@@ -109,14 +109,14 @@ class MockGame(DNDGame):
 
     def update_danger(self, new_cell):
         location = new_cell.location
-        if location in self.get_object_locations(PIT) and ROPE.value not in new_cell.inventory:
+        if location in self.get_object_locations(PIT_STR) and ROPE_STR not in new_cell.inventory:
             new_cell.status = "(Trapped in a dark pit until dead)"
-        elif location in self.get_object_locations(DRAGON):
+        elif location in self.get_object_locations(DRAGON_STR):
             new_cell.status = "(Killed by the Dragon)"
 
     def remove_rope_if_pit(self, new_cell, source_cell):
-        if source_cell.location in self.get_object_locations(PIT):
-            rope_list = [ROPE.value]
+        if source_cell.location in self.get_object_locations(PIT_STR):
+            rope_list = [ROPE_STR]
             inventory_set = set(new_cell.inventory) - set(rope_list)
             new_cell.inventory = list (inventory_set)
 
@@ -131,13 +131,24 @@ class MockGame(DNDGame):
         return ret_val
 
     def update_bats_nearby(self, result:CellResult, move_number):
-        if BAT.value in result.nearby:
+        if BAT_STR in result.nearby:
             return
         for adjacent_location in self.get_adjacent_locations_all(result.location):
             dummy = self.get_bat_fly_to(move_number+1,adjacent_location)
             if dummy != "":
-                result.nearby = add_comma(result.nearby,BAT.value)
+                result.nearby = add_comma(result.nearby,BAT_STR)
                 break
+
+    def copy_location_objects_to_mock_object_locations(self, location_objects):
+        for (location,object_strs) in location_objects.items():
+            for obj_str in object_strs:
+                if len(obj_str) > 0:
+                    self._object_locations[obj_str].append(location)
+
+    def get_mock_object_location(self, obj):
+        return self._object_locations[obj]
+
+
 
 
 
