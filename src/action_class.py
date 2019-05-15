@@ -16,7 +16,6 @@ class Action(object):
         self.result = copy.deepcopy(result)
 
     def key_field_equals(self,obj):
-        print("Debug 4",self.result.nearby,"**",obj.result.nearby)
         try:
             ret_val = self.action == obj.action \
                 and self.direction == obj.direction \

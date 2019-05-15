@@ -33,9 +33,6 @@ class CellResult(object):
 
 
     def key_fields_equal(self,obj):
-        print("debug")
-        print(self.location,"n",self.nearby,"i",self.inventory,self.status)
-        print(obj.location,"n",obj.nearby,"i",obj.inventory,obj.status)
         try:
             ret_val = self.nearby == obj.nearby \
                       and self.inventory == obj.inventory \

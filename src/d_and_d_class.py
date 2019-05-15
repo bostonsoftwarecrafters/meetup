@@ -147,7 +147,6 @@ class DNDGame(object):
     def derive_contents(self):
 
         self.derive_visited_objects()
-        print("Debug a",self._derived_contents)
         self.derive_contents_of_unknown_adjacent_cells()
 
     def derive_content_danger_visited(self, action_index):
