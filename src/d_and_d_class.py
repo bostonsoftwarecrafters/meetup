@@ -127,8 +127,9 @@ class DNDGame(object):
         self.catalog_cell_visited(result_cell)
         return result_cell
 
-    def derive_visited_objects(self,dictionary):
+    def derive_visited_objects(self):
         actions = self.get_actions()
+        self.derive_content_start_cell()
         for action_index in range(1, len(actions)):
             curr_action: Action = actions[action_index]
             curr_location = curr_action.result.location
@@ -201,24 +202,26 @@ class DNDGame(object):
         return copy.deepcopy(self._derived_bats)
 
     def derive_contents_of_unknown_adjacent_cells(self):
-        pass
-        # visited_cells = self.get_cells_visited()
-        # for visited_cell in visited_cells:
-        #     location = visited_cell.location
-        #     adjacent_locations = self.get_adjacent_locations_all(location)
-        #     unknown_adjacent_locations = self.get_adjacent_locations_not_visited(location)
-        #     if len(unknown_adjacent_locations) == 0:
-        #         pass
-        #     elif visited_cell.nearby == "":
-        #         for unknown_adjacent_location in unknown_adjacent_locations:
-        #             self.add_location_derived_content(unknown_adjacent_location,[])
-        #     else:
-        #         things_nearby = ""
-        #         for adjacent_location in adjacent_locations:
-        #             for ''
+
+        visited_cells = self.get_cells_visited()
+        for (location,visited_cell) in visited_cells.items():
+            adjacent_locations = self.get_adjacent_locations_all(location)
+            unknown_adjacent_locations = self.get_adjacent_locations_not_visited(location)
+            if len(unknown_adjacent_locations) == 0:
+                pass
+            elif visited_cell.nearby == "":
+                for unknown_adjacent_location in unknown_adjacent_locations:
+                    self.add_location_derived_content(unknown_adjacent_location,[])
+
 
     def get_derived_contents(self):
         return copy.deepcopy(self._derived_contents)
+
+    # TODO Write test just for this function
+    def derive_content_start_cell(self):
+        location = self.get_action(0).result.location
+        inventory = self.get_action(0).result.inventory
+        self.add_location_derived_content(location,inventory)
 
 
 

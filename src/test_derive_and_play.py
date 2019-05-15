@@ -28,6 +28,7 @@ def test_adjacent_cells_all_safe(safe_mock_game_g3_setup_teardown):
     adjacent_locations_g3_g4_set = set(adjacent_locations_g3) | set(adjacent_locations_g4)
     # TODO change derive_mock_game to move to class and not return any value OR don't store at all in game and just use get function
     game_derived: MockGame = derive_mock_game(game_orig)
+    print("debug ",game_orig._derived_contents)
     for location in adjacent_locations_g3_g4_set:
         assert game_orig.get_derived_content_of_location(location) == []
 
