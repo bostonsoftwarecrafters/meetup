@@ -127,7 +127,7 @@ class DNDGame(object):
         self.catalog_cell_visited(result_cell)
         return result_cell
 
-    def derive_visited_objects(self):
+    def derive_visited_objects(self,dictionary):
         actions = self.get_actions()
         for action_index in range(1, len(actions)):
             curr_action: Action = actions[action_index]

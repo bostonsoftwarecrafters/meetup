@@ -20,6 +20,20 @@ def test_mock_move_to_pit(safe_mock_game_g3_setup_teardown):
     game_orig = safe_mock_game_g3_setup_teardown
     assert_move_to_obj(game_orig, PIT_STR)
 
+def test_adjacent_cells_all_safe(safe_mock_game_g3_setup_teardown):
+    game_orig = safe_mock_game_g3_setup_teardown
+    action = game_orig.do_action_move(EAST, "Go to G4")
+    adjacent_locations_g3 = game_orig.get_adjacent_locations_all("G3")
+    adjacent_locations_g4 = game_orig.get_adjacent_locations_all("G4")
+    adjacent_locations_g3_g4_set = set(adjacent_locations_g3) | set(adjacent_locations_g4)
+    # TODO change derive_mock_game to move to class and not return any value OR don't store at all in game and just use get function
+    game_derived: MockGame = derive_mock_game(game_orig)
+    for location in adjacent_locations_g3_g4_set:
+        assert game_orig.get_derived_content_of_location(location) == []
+
+    assert_play_game_same_results(game_derived, game_orig)
+
+
 def test_pick_up_rope_go_to_pit(safe_mock_game_g3_setup_teardown):
     game_orig = safe_mock_game_g3_setup_teardown
     action = game_orig.set_mock_object_location(ROPE_STR, "F5")
