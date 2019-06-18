@@ -32,6 +32,68 @@ class GildedRose {
         this.items = items;
     }
 
+    public void unRefactoredUpdate() {
+        for (int i = 0; i < items.length; i++) {
+            Item currentItem = items[i];
+            updateItem(currentItem);
+        }
+    }
+
+    private void updateItem(Item currentItem) {
+        if (PRODUCT_SULFURAS.equals(currentItem.name)) {
+           return;
+        }
+
+        if (!currentItem.name.equals(PRODUCT_AGED_BRIE)
+                && !currentItem.name.equals(PRODUCT_BACKSTAGE_PASSES)) {
+            if (currentItem.quality > MIN_STANDARD_QUALITY) {
+                if (!currentItem.name.equals(PRODUCT_SULFURAS)) {
+                    currentItem.quality = currentItem.quality - 1;
+                }
+            }
+        } else {
+            if (currentItem.quality < MAX_STANDARD_QUALITY) {
+                currentItem.quality = currentItem.quality + 1;
+
+                if (currentItem.name.equals(PRODUCT_BACKSTAGE_PASSES)) {
+                    if (currentItem.daysToExpire < 11) {
+                        if (currentItem.quality < MAX_STANDARD_QUALITY) {
+                            currentItem.quality = currentItem.quality + 1;
+                        }
+                    }
+
+                    if (currentItem.daysToExpire < 6) {
+                        if (currentItem.quality < MAX_STANDARD_QUALITY) {
+                            currentItem.quality = currentItem.quality + 1;
+                        }
+                    }
+                }
+            }
+        }
+
+        if (!currentItem.name.equals(PRODUCT_SULFURAS)) {
+            currentItem.daysToExpire = currentItem.daysToExpire - 1;
+        }
+
+        if (currentItem.daysToExpire < 0) {
+            if (!currentItem.name.equals(PRODUCT_AGED_BRIE)) {
+                if (!currentItem.name.equals(PRODUCT_BACKSTAGE_PASSES)) {
+                    if (currentItem.quality > MIN_STANDARD_QUALITY) {
+                        if (!currentItem.name.equals(PRODUCT_SULFURAS)) {
+                            currentItem.quality = currentItem.quality - 1;
+                        }
+                    }
+                } else {
+                    currentItem.quality = currentItem.quality - currentItem.quality;
+                }
+            } else {
+                if (currentItem.quality < MAX_STANDARD_QUALITY) {
+                    currentItem.quality = currentItem.quality + 1;
+                }
+            }
+        }
+    }
+
     public void updateQuality() {
         for (int i = 0; i < items.length; i++) {
             if (!items[i].name.equals(PRODUCT_AGED_BRIE)
